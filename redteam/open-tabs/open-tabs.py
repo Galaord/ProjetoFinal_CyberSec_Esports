@@ -15,48 +15,83 @@ Usage:
 import argparse
 import sys
 import time
- 
+
 try:
     from playwright.sync_api import sync_playwright
 except ImportError:
     sys.exit(
         "Playwright isn't installed.\n"
-        "Try: pip install playwright --break-system-packages && playwright install chromium\n"
-        "On NixOS, see the comment at the top of this script for the recommended setup."
+        "Run inside a Nix shell or install via python3Packages.playwright."
     )
- 
-# Default list of URLs, edit this if you're not passing args/files
+
+# Default list of URLs
 URLS = [
     "https://k4talicious.com"
 ]
- 
- 
+
+
 def load_urls_from_file(path: str) -> list[str]:
     with open(path, "r", encoding="utf-8") as f:
         return [line.strip() for line in f if line.strip() and not line.startswith("#")]
- 
- 
-def run(urls: list[str], display_seconds: float, headless: bool, once: bool) -> None:
+
+
+def run(
+    urls: list[str],
+    display_seconds: float,
+    headless: bool,
+    once: bool,
+    batch_size: int,
+    repeat_count: int,
+) -> None:
     if not urls:
         print("No URLs to open.")
         return
- 
+
+    # Expand the URL list according to repeat_count
+    # e.g., ['urlA'] with count=10 becomes ['urlA', 'urlA', ..., 'urlA'] (10 times)
+    expanded_urls = []
+    for u in urls:
+        expanded_urls.extend([u] * repeat_count)
+
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=headless)
+        browser = p.chromium.launch(
+            headless=headless,
+            args=[
+                "--no-startup-window",
+                "--silent-launch",
+                "--wm-window-animations-disabled",
+            ],
+        )
         context = browser.new_context()
- 
+
         try:
             while True:
-                for url in urls:
-                    page = context.new_page()
-                    print(f"Opening {url}")
-                    try:
-                        page.goto(url, wait_until="domcontentloaded", timeout=15000)
-                    except Exception as e:
-                        print(f"  (load issue, closing anyway: {e})")
+                # Chunk expanded URLs into batches of size `batch_size`
+                for i in range(0, len(expanded_urls), batch_size):
+                    current_batch = expanded_urls[i : i + batch_size]
+                    pages = []
+
+                    # 1. Open all tab instances in the current batch
+                    print(f"\n--- Opening batch of {len(current_batch)} tab(s) ---")
+                    for idx, url in enumerate(current_batch, 1):
+                        page = context.new_page()
+                        print(f"[{idx}/{len(current_batch)}] Opening {url}")
+                        try:
+                            page.goto(url, wait_until="domcontentloaded", timeout=15000)
+                        except Exception as e:
+                            print(f"  (load issue: {e})")
+                        pages.append((page, url))
+
+                    # 2. Wait for the set delay while all tabs are open together
+                    print(f"Holding {len(pages)} tab(s) open for {display_seconds}s...")
                     time.sleep(display_seconds)
-                    page.close()
-                    print(f"Closed {url}")
+
+                    # 3. Close all tabs in the batch
+                    print(f"Closing batch of {len(pages)} tab(s)...")
+                    for page, url in pages:
+                        page.close()
+                    print(f"Closed all {len(pages)} instance(s).")
+
                 if once:
                     break
         except KeyboardInterrupt:
@@ -64,29 +99,63 @@ def run(urls: list[str], display_seconds: float, headless: bool, once: bool) -> 
         finally:
             context.close()
             browser.close()
- 
- 
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Open URLs as tabs that auto-close after N seconds.")
+    parser = argparse.ArgumentParser(
+        description="Open URLs as tabs and close them in batches after N seconds."
+    )
     parser.add_argument("urls", nargs="*", help="URLs to open")
     parser.add_argument("-f", "--file", help="Path to a text file with one URL per line")
-    parser.add_argument("-d", "--delay", type=float, default=3.0,
-                         help="Seconds each tab stays open before closing (default: 3)")
-    parser.add_argument("--once", action="store_true",
-                         help="Go through the list once instead of looping forever")
-    parser.add_argument("--headless", action="store_true",
-                         help="Run without a visible browser window")
+    parser.add_argument(
+        "-d",
+        "--delay",
+        type=float,
+        default=3.0,
+        help="Seconds tabs stay open before closing the batch (default: 3)",
+    )
+    parser.add_argument(
+        "-b",
+        "--batch-size",
+        type=int,
+        default=10,
+        help="Maximum number of tabs per batch (default: 10)",
+    )
+    parser.add_argument(
+        "-c",
+        "--count",
+        type=int,
+        default=1,
+        help="Number of duplicate instances to open for each URL (default: 1)",
+    )
+    parser.add_argument(
+        "--once",
+        action="store_true",
+        help="Go through the list once instead of looping forever",
+    )
+    parser.add_argument(
+        "--headless",
+        action="store_true",
+        help="Run without a visible browser window",
+    )
     args = parser.parse_args()
- 
+
     if args.file:
         urls = load_urls_from_file(args.file)
     elif args.urls:
         urls = args.urls
     else:
         urls = URLS
- 
-    run(urls, display_seconds=args.delay, headless=args.headless, once=args.once)
- 
- 
+
+    run(
+        urls,
+        display_seconds=args.delay,
+        headless=args.headless,
+        once=args.once,
+        batch_size=args.batch_size,
+        repeat_count=args.count,
+    )
+
+
 if __name__ == "__main__":
     main()
