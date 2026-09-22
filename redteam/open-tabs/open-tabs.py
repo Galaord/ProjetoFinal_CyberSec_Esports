@@ -21,6 +21,7 @@ try:
 except ImportError:
     sys.exit(
         "Playwright isn't installed.\n"
+        "Try: pip install playwright --break-system-packages && playwright install chromium\n"
         "Run inside a Nix shell or install via python3Packages.playwright."
     )
 
