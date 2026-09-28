@@ -4,11 +4,6 @@ pkgs.mkShell {
   buildInputs = [
     pkgs.python3
     pkgs.python3Packages.playwright
-    pkgs.playwright-driver.browsers
+    pkgs.python313Packages.pysocks
   ];
-
-  shellHook = ''
-    export PLAYWRIGHT_BROWSERS_PATH=${pkgs.playwright-driver.browsers}
-    export PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
-  '';
 }
