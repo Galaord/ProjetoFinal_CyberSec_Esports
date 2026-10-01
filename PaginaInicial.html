@@ -1,0 +1,242 @@
+<style>
+:root{
+  --bg:#050811;
+  --bg2:#0a0f1d;
+  --panel:#0f172a;
+  --panel2:#141f36;
+  --text:#ffffff;
+  --muted:#cbd5e1;
+  --red:#ff2a4b;
+  --blue:#0066ff;
+  --cyan:#00d2ff;
+  --line:rgba(255,255,255,.12);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:
+  radial-gradient(circle at 78% 12%,rgba(0,102,255,.22),transparent 35%),
+  radial-gradient(circle at 10% 30%,rgba(255,42,75,.20),transparent 35%),
+  linear-gradient(180deg,#04060d 0%,#080d1a 45%,#050811 100%);
+  color:var(--text);font-family:Inter,system-ui,sans-serif;
+}
+a{text-decoration:none;color:inherit}
+button{font:inherit}
+.container{width:min(1180px,calc(100% - 40px));margin:auto}
+.nav{
+  height:78px;display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:10;
+}
+.logo{font-weight:900;letter-spacing:-1px;font-size:21px;display:flex;gap:10px;align-items:center;color:#ffffff}
+.logo-mark{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--red),var(--blue));
+  transform:skew(-12deg);box-shadow:0 0 30px rgba(255,42,75,.4)
+}
+.nav-links{display:flex;gap:30px;color:#ffffff;font-size:14px;font-weight:600}
+.nav-links a:hover{color:var(--cyan)}
+.nav-actions{display:flex;gap:10px;align-items:center}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);border-radius:10px;padding:12px 18px;
+  font-weight:800;font-size:14px;cursor:pointer;transition:.2s;color:#ffffff;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-ghost{background:rgba(255,255,255,.05)}
+.btn-primary{
+  color:#fff;border:0;background:linear-gradient(100deg,var(--red),var(--blue));
+  box-shadow:0 10px 35px rgba(0,102,255,.3)
+}
+.mobile-menu{display:none}
+
+.hero{min-height:690px;display:grid;grid-template-columns:1fr 1.05fr;gap:55px;align-items:center;padding:55px 0 90px;position:relative}
+.hero:before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.18;
+  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:60px 60px;mask-image:linear-gradient(to bottom,#000,transparent 85%);
+}
+.eyebrow{color:var(--red);font-size:12px;font-weight:900;letter-spacing:2.2px;text-transform:uppercase;margin-bottom:18px}
+h1{font-size:clamp(44px,5.4vw,76px);line-height:.98;letter-spacing:-4px;margin:0 0 24px;max-width:650px;color:#ffffff}
+.gradient-text{background:linear-gradient(90deg,#ffffff 20%,var(--cyan) 55%,var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-copy{font-size:17px;line-height:1.7;color:var(--muted);max-width:570px}
+.hero-cta{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+.trust{display:flex;gap:22px;align-items:center;margin-top:42px;color:#ffffff;font-size:12px;font-weight:700;flex-wrap:wrap}
+.trust span{padding-right:22px;border-right:1px solid var(--line)}
+.trust span:last-child{border:0}
+
+.arena{
+  min-height:470px;border:1px solid var(--line);border-radius:26px;
+  background:linear-gradient(145deg,rgba(15,23,42,.96),rgba(5,8,17,.98));
+  box-shadow:0 35px 100px rgba(0,0,0,.6),0 0 70px rgba(0,102,255,.18);
+  overflow:hidden;position:relative;transform:rotate(1deg);
+}
+.arena:after{content:"";position:absolute;width:260px;height:260px;right:-100px;bottom:-100px;background:var(--red);filter:blur(100px);opacity:.25}
+.arena-top{height:55px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px;padding:0 17px}
+.dot{width:8px;height:8px;border-radius:50%;background:#334155}
+.arena-search{margin-left:auto;width:150px;height:26px;border:1px solid var(--line);border-radius:8px;background:#050811}
+.arena-body{padding:22px}
+.feature{
+  height:205px;border-radius:18px;padding:24px;display:flex;flex-direction:column;justify-content:flex-end;
+  background:
+    radial-gradient(circle at 80% 25%,rgba(255,42,75,.7),transparent 35%),
+    linear-gradient(135deg,#0f2b5c,#070d1a 70%);
+  border:1px solid rgba(255,255,255,.12);position:relative;overflow:hidden
+}
+.feature:before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 35%,rgba(255,255,255,.12),transparent 55%);transform:translateX(-80%)}
+.feature-title{font-size:25px;font-weight:900;position:relative;color:#ffffff}
+.feature-meta{color:#e2e8f0;font-size:12px;margin-top:8px;position:relative}
+.arena-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.game-card{height:85px;border-radius:12px;border:1px solid var(--line);background:#0a0f1d;padding:11px;display:flex;align-items:end;font-weight:800;font-size:11px;color:#ffffff;overflow:hidden;position:relative}
+.game-card:nth-child(1){background:linear-gradient(145deg,#0f2b5c,#080f1e)}
+.game-card:nth-child(2){background:linear-gradient(145deg,#5c1220,#080f1e)}
+.game-card:nth-child(3){background:linear-gradient(145deg,#0a435c,#080f1e)}
+.game-card:nth-child(4){background:linear-gradient(145deg,#4d1f1f,#080f1e)}
+.game-card:nth-child(5){background:linear-gradient(145deg,#123b5c,#080f1e)}
+.game-card:nth-child(6){background:linear-gradient(145deg,#421251,#080f1e)}
+
+.section{padding:100px 0}
+.section-head{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:38px}
+.kicker{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);font-weight:900}
+h2{font-size:clamp(34px,4vw,52px);letter-spacing:-2.5px;margin:10px 0 0;color:#ffffff}
+.section-head p{color:var(--muted);max-width:450px;line-height:1.7}
+
+.games{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.game{
+  min-height:175px;border:1px solid var(--line);border-radius:18px;padding:20px;
+  display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;
+  background:linear-gradient(145deg,#0f172a,#050811);transition:.25s;color:#ffffff;
+}
+.game:hover{transform:translateY(-6px);border-color:var(--red)}
+.game:nth-child(1){background:linear-gradient(145deg,#0f2b5c,#050811)}
+.game:nth-child(2){background:linear-gradient(145deg,#5c1220,#050811)}
+.game:nth-child(3){background:linear-gradient(145deg,#0a435c,#050811)}
+.game:nth-child(4){background:linear-gradient(145deg,#4d1f1f,#050811)}
+.game-icon{font-size:30px;margin-bottom:auto;color:var(--cyan)}
+.game strong{font-size:18px;color:#ffffff}.game small{color:var(--muted);margin-top:6px}
+
+.tournaments{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.tournament{
+  border:1px solid var(--line);border-radius:18px;background:rgba(15,23,42,.9);padding:18px;color:#ffffff
+}
+.t-top{display:flex;justify-content:space-between;align-items:center}
+.tag{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:1px;padding:7px 9px;border-radius:7px;background:rgba(255,42,75,.15);color:var(--red)}
+.prize{font-weight:900;color:#ffffff}
+.tournament h3{margin:24px 0 8px;font-size:18px;color:#ffffff}
+.tournament p{margin:0;color:var(--muted);font-size:13px}
+.progress{height:6px;background:#1e293b;border-radius:99px;margin:18px 0 12px;overflow:hidden}
+.progress i{display:block;height:100%;width:72%;background:linear-gradient(90deg,var(--blue),var(--red));border-radius:99px}
+.t-foot{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+
+.stats{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(4,1fr);margin-top:20px
+}
+.stat{padding:45px 25px;text-align:center;border-right:1px solid var(--line)}
+.stat:last-child{border:0}
+.stat b{display:block;font-size:38px;letter-spacing:-2px;color:#ffffff}
+.stat span{display:block;color:var(--muted);font-size:12px;margin-top:8px;text-transform:uppercase;letter-spacing:1px}
+
+.cta{
+  padding:85px 30px;border:1px solid rgba(255,255,255,.12);border-radius:28px;text-align:center;
+  background:radial-gradient(circle at 50% 0%,rgba(0,102,255,.25),transparent 48%),linear-gradient(145deg,#0f172a,#050811)
+}
+.cta h2{max-width:750px;margin:10px auto 18px;color:#ffffff}
+.cta p{max-width:600px;margin:0 auto;color:var(--muted);line-height:1.7}
+.cta .hero-cta{justify-content:center}
+
+footer{padding:35px 0 50px;color:var(--muted);font-size:12px}
+.footer-inner{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--line);padding-top:25px}
+.footer-links{display:flex;gap:20px}
+
+@media(max-width:900px){
+  .nav-links{display:none}.nav-actions{display:none}.mobile-menu{display:block;background:none;border:0;color:white;font-size:24px}
+  .hero{grid-template-columns:1fr;padding-top:35px}.arena{transform:none}
+  .games{grid-template-columns:repeat(2,1fr)}.tournaments{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:0}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}
+}
+@media(max-width:560px){
+  .container{width:min(100% - 28px,1180px)}
+  .hero{min-height:auto;padding-bottom:60px}h1{letter-spacing:-2.5px}
+  .arena{min-height:390px}.feature{height:165px}.arena-grid{grid-template-columns:repeat(2,1fr)}
+  .games{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.stat{border-right:0;border-bottom:1px solid var(--line)!important}
+  .section{padding:70px 0}.section-head{display:block}
+  .footer-inner{display:block}.footer-links{margin-top:15px;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<header class="container nav">
+  <a class="logo" href="#"><span class="logo-mark"></span>NEXUS ARENA</a>
+  <nav class="nav-links">
+    <a href="#jogos">Jogos</a><a href="#torneios">Torneios</a><a href="#ranking">Rankings</a><a href="#comunidade">Comunidade</a>
+  </nav>
+  <div class="nav-actions"><a class="btn btn-ghost" href="#torneios">Explorar</a><a class="btn btn-primary" href="#entrar">Entrar</a></div>
+  <button class="mobile-menu" aria-label="Menu">☰</button>
+</header>
+
+<main>
+<section class="container hero">
+  <div>
+    <div class="eyebrow">A tua arena de CS</div>
+    <h2>Joga. Diverte-te.<br><span class="gradient-text">Sobe de nível.</span></h2>
+    <p class="hero-copy">Torneios e comunidades para jogadores que querem transformar cada partida numa experiencia única. Entra, encontra o teu desafio e prova o que vales.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#torneios">Começar a jogar →</a>
+      <a class="btn btn-ghost" href="#jogos">Ver jogos</a>
+    </div>
+    <div class="trust"><span>+12K jogadores</span><span>+340 torneios</span></div>
+  </div>
+  <div class="arena" aria-label="Pré-visualização da plataforma">
+    <div class="arena-top"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="arena-search"></div></div>
+    <div class="arena-body">
+      <div class="feature"><div class="feature-title">NIGHTFALL CUP</div><div class="feature-meta">Prêmio de 5.000 €</div></div>
+    </div>
+  </div>
+</section>
+<section class="section" id="jogos">
+<div class="container">
+  <div class="section-head"><div><div class="kicker">Escolhe a tua equipa</div><h2>Entra na competição.</h2></div><p>Cria uma identidade competitiva forte com uma vasta lista de equipas sempre ativas.</p></div>
+  <div class="games">
+    <a class="game" href="#"><div class="game-icon">◈</div><strong>Team Falcon</strong><small>Torneios participados: 128</small></a>
+    <a class="game" href="#"><div class="game-icon">✦</div><strong>Bad Piggies</strong><small>Torneios participados: 85</small></a>
+    <a class="game" href="#"><div class="game-icon">△</div><strong>Cynical Legends</strong><small>Torneios participados: 62</small></a>
+    <a class="game" href="#"><div class="game-icon">◆</div><strong>Digital Lakers</strong><small>Torneios participados: 40</small></a>
+  </div>
+</div>
+</section>
+<section class="section" id="torneios">
+<div class="container">
+  <div class="section-head"><div><div class="kicker">Agora na arena</div><h2>Torneios em destaque.</h2></div><a class="btn btn-ghost" href="#">Ver todos →</a></div>
+  <div class="tournaments">
+    <article class="tournament"><div class="t-top"><span class="tag">Ao vivo</span><span class="prize">€2.500</span></div><h3>Nightfall Open #18 · EU</h3><div class="progress"><i></i></div><div class="t-foot"><span>48 / 64 equipas</span><span>Começou há 18m</span></div></article>
+    <article class="tournament"><div class="t-top"><span class="tag">Hoje</span><span class="prize">€1.000</span></div><h3>Midnight Rush · PT / ES</h3><div class="progress"><i style="width:54%"></i></div><div class="t-foot"><span>27 / 32 equipas</span><span>19:30</span></div></article>
+    <article class="tournament"><div class="t-top"><span class="tag">Amanhã</span><span class="prize">€750</span></div><h3>Neon Clash · US</h3><div class="progress"><i style="width:38%"></i></div><div class="t-foot"><span>19 / 64 equipas</span><span>21:00</span></div></article>
+  </div>
+</div>
+</section>
+<section class="container" id="ranking">
+  <div class="stats">
+    <div class="stat"><b>12K+</b><span>Jogadores ativos</span></div>
+    <div class="stat"><b>340+</b><span>Torneios</span></div>
+    <div class="stat"><b>€86K</b><span>Prémios este mês</span></div>
+    <div class="stat"><b>98%</b><span>Matchmaking concluído</span></div>
+  </div>
+</section>
+<section class="section" id="comunidade">
+<div class="container">
+  <div class="cta" id="entrar">
+    <div class="kicker">A tua próxima vitória começa aqui</div>
+    <h2>Pronto para entrar na arena?</h2>
+    <p>Cria o teu perfil, encontra uma equipa e começa a jogar agora mesmo.</p>
+    <div class="hero-cta"><a class="btn btn-primary" href="#">Criar conta agora →</a><a class="btn btn-ghost" href="#">Entrar</a></div>
+  </div>
+</div>
+</section>
+</main>
+<footer>
+<div class="container footer-inner">
+  <span>© 2026 NEXUS ARENA</span>
+  <div class="footer-links"><a href="#">Termos de serviço</a><a href="#">Privacidade</a></div>
+</div>
+</footer>

@@ -1,0 +1,10 @@
+To do list - Website
+
+Diogo: 
+
+Joana: 
+
+Lucas: Dar fix á secção de CSS do site
+Nota: Neste momento irei tratar de reparar as tags do CSS, como tivemos que tirar alguns conteúdos para trocar por outros algumas das tags e categorias ficaram obsoletas e/ou já não encaixam no projeto
+
+Vasco: 
