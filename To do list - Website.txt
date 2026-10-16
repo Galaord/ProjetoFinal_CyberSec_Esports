@@ -5,6 +5,6 @@ Diogo:
 Joana: 
 
 Lucas: Dar fix á secção de CSS do site
-Nota: Neste momento irei tratar de reparar as tags do CSS, como tivemos que tirar alguns conteúdos para trocar por outros algumas das tags e categorias ficaram obsoletas e/ou já não encaixam no projeto
+Nota: Acreditamos já ter todas as paginas terminadas, mas partilho da opinião que devíamos simplificar a aparencia do mesmo. Entretanto a página comunidade precisa mesmo muito de ser revista, foi a única que não fiz sozinho e tou com bastantes dúvidas em relação ao que tenho.
 
 Vasco: 
