@@ -150,7 +150,9 @@ footer{padding:35px 0 50px;color:var(--muted);font-size:12px}
 .footer-links{display:flex;gap:20px}
 
 @media(max-width:900px){
-  .nav-links{display:none}.nav-actions{display:none}.mobile-menu{display:block;background:none;border:0;color:white;font-size:24px}
+  .nav-links{display:none}.nav-links.open{display:flex;position:absolute;top:68px;left:0;right:0;flex-direction:column;gap:0;padding:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 36px rgba(0,0,0,.4)}
+  .nav-links.open a{padding:14px;border-radius:8px}.nav-links.open a:hover{background:rgba(255,255,255,.05)}
+  .nav-actions{display:none}.mobile-menu{display:block;background:none;border:0;color:white;font-size:24px;cursor:pointer}
   .hero{grid-template-columns:1fr;padding-top:35px}.arena{transform:none}
   .games{grid-template-columns:repeat(2,1fr)}.tournaments{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}
   .stat:nth-child(2){border-right:0}.stat:nth-child(1),.stat:nth-child(2){border-bottom:1px solid var(--line)}
@@ -167,13 +169,32 @@ footer{padding:35px 0 50px;color:var(--muted);font-size:12px}
 </head>
 <body>
 <header class="container nav">
-  <a class="logo" href="#"><span class="logo-mark"></span>NEXUS ARENA</a>
-  <nav class="nav-links">
-    <a href="#jogos">Jogos</a><a href="#torneios">Torneios</a><a href="#ranking">Rankings</a><a href="#comunidade">Comunidade</a>
+  <a class="logo" href="PaginaInicial.html"><span class="logo-mark"></span>NEXUS ARENA</a>
+  <nav class="nav-links" id="primary-navigation" aria-label="Navegação principal">
+    <a href="#jogos">Jogos</a><a href="#torneios">Torneios</a><a href="#ranking">Rankings</a><a href="Comunidade.html">Comunidade</a>
   </nav>
   <div class="nav-actions"><a class="btn btn-ghost" href="#torneios">Explorar</a><a class="btn btn-primary" href="login.html">Entrar</a></div>
-  <button class="mobile-menu" aria-label="Menu">☰</button>
+  <button class="mobile-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-navigation">☰</button>
 </header>
+<script>
+  const mobileMenu = document.querySelector(".mobile-menu");
+  const primaryNavigation = document.getElementById("primary-navigation");
+
+  mobileMenu.addEventListener("click", () => {
+    const isOpen = mobileMenu.getAttribute("aria-expanded") === "true";
+    mobileMenu.setAttribute("aria-expanded", String(!isOpen));
+    mobileMenu.setAttribute("aria-label", isOpen ? "Abrir menu" : "Fechar menu");
+    primaryNavigation.classList.toggle("open", !isOpen);
+  });
+
+  primaryNavigation.addEventListener("click", (event) => {
+    if (event.target.closest("a")) {
+      mobileMenu.setAttribute("aria-expanded", "false");
+      mobileMenu.setAttribute("aria-label", "Abrir menu");
+      primaryNavigation.classList.remove("open");
+    }
+  });
+</script>
 
 <main>
 <section class="container hero">
@@ -198,16 +219,16 @@ footer{padding:35px 0 50px;color:var(--muted);font-size:12px}
 <div class="container">
   <div class="section-head"><div><div class="kicker">Escolhe a tua equipa</div><h2>Entra na competição.</h2></div><p>Cria uma identidade competitiva forte com uma vasta lista de equipas sempre ativas.</p></div>
   <div class="games">
-    <a class="game" href="#"><div class="game-icon">◈</div><strong>Team Falcon</strong><small>Torneios participados: 128</small></a>
-    <a class="game" href="#"><div class="game-icon">✦</div><strong>Bad Piggies</strong><small>Torneios participados: 85</small></a>
-    <a class="game" href="#"><div class="game-icon">△</div><strong>Cynical Legends</strong><small>Torneios participados: 62</small></a>
-    <a class="game" href="#"><div class="game-icon">◆</div><strong>Digital Lakers</strong><small>Torneios participados: 40</small></a>
+    <a class="game" href="Comunidade.html"><div class="game-icon">◈</div><strong>Team Falcon</strong><small>Torneios participados: 128</small></a>
+    <a class="game" href="Comunidade.html"><div class="game-icon">✦</div><strong>Bad Piggies</strong><small>Torneios participados: 85</small></a>
+    <a class="game" href="Comunidade.html"><div class="game-icon">△</div><strong>Cynical Legends</strong><small>Torneios participados: 62</small></a>
+    <a class="game" href="Comunidade.html"><div class="game-icon">◆</div><strong>Digital Lakers</strong><small>Torneios participados: 40</small></a>
   </div>
 </div>
 </section>
 <section class="section" id="torneios">
 <div class="container">
-  <div class="section-head"><div><div class="kicker">Agora na arena</div><h2>Torneios em destaque.</h2></div><a class="btn btn-ghost" href="#">Ver todos →</a></div>
+  <div class="section-head"><div><div class="kicker">Agora na arena</div><h2>Torneios em destaque.</h2></div><a class="btn btn-ghost" href="torneios.html">Ver todos →</a></div>
   <div class="tournaments">
     <article class="tournament"><div class="t-top"><span class="tag">Ao vivo</span><span class="prize">€2.500</span></div><h3>Nightfall Open #18 · EU</h3><div class="progress"><i></i></div><div class="t-foot"><span>48 / 64 equipas</span><span>Começou há 18m</span></div></article>
     <article class="tournament"><div class="t-top"><span class="tag">Hoje</span><span class="prize">€1.000</span></div><h3>Midnight Rush · PT / ES</h3><div class="progress"><i style="width:54%"></i></div><div class="t-foot"><span>27 / 32 equipas</span><span>19:30</span></div></article>
@@ -229,7 +250,7 @@ footer{padding:35px 0 50px;color:var(--muted);font-size:12px}
     <div class="kicker">A tua próxima vitória começa aqui</div>
     <h2>Pronto para entrar na arena?</h2>
     <p>Cria o teu perfil, encontra uma equipa e começa a jogar agora mesmo.</p>
-    <div class="hero-cta"><a class="btn btn-primary" href="registo.html">Criar conta agora</a><a class="btn btn-ghost" href="login.html">Entrar</a></div>
+    <div class="hero-cta"><a class="btn btn-primary" href="Comunidade.html">Explorar comunidade</a><a class="btn btn-ghost" href="registo.html">Criar conta</a><a class="btn btn-ghost" href="login.html">Entrar</a></div>
   </div>
 </div>
 </section>

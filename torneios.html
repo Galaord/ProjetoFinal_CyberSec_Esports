@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="pt">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#050811">
+	<title>Torneios | NEXUS ARENA</title>
+	<style>
+		:root{
+			--bg:#050811;
+			--panel:#0f172a;
+			--panel2:#141f36;
+			--text:#ffffff;
+			--muted:#cbd5e1;
+			--red:#ff2a4b;
+			--blue:#0066ff;
+			--cyan:#00d2ff;
+			--line:rgba(255,255,255,.12);
+		}
+		*{box-sizing:border-box}
+		html{scroll-behavior:smooth}
+		body{
+			min-height:100vh;margin:0;color:var(--text);
+			background:
+				radial-gradient(circle at 78% 14%,rgba(0,102,255,.22),transparent 35%),
+				radial-gradient(circle at 10% 42%,rgba(255,42,75,.17),transparent 35%),
+				linear-gradient(180deg,#04060d 0%,#080d1a 48%,#050811 100%);
+			font-family:Inter,system-ui,sans-serif;
+		}
+		a{color:inherit;text-decoration:none}
+		button{font:inherit}
+		.container{width:min(1180px,calc(100% - 40px));margin:auto}
+		.nav{height:78px;display:flex;align-items:center;justify-content:space-between}
+		.logo{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:900;letter-spacing:-1px}
+		.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--blue));transform:skew(-12deg);box-shadow:0 0 30px rgba(255,42,75,.4)}
+		.nav-links{display:flex;gap:28px;color:var(--muted);font-size:14px;font-weight:700}
+		.nav-links a:hover,.back-link:hover{color:var(--cyan)}
+		.nav-actions{display:flex;align-items:center;gap:10px}
+		.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 17px;border:1px solid var(--line);border-radius:10px;font-size:13px;font-weight:800;transition:transform .2s,border-color .2s}
+		.btn:hover{transform:translateY(-2px);border-color:var(--cyan)}
+		.btn-ghost{background:rgba(255,255,255,.05)}
+		.btn-primary{border:0;background:linear-gradient(100deg,var(--red),var(--blue));box-shadow:0 10px 35px rgba(0,102,255,.25)}
+		main{padding:54px 0 90px}
+		.page-heading{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:34px}
+		.eyebrow,.kicker{color:var(--red);font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+		h1{margin:12px 0 12px;font-size:clamp(42px,6vw,68px);line-height:1;letter-spacing:-3px}
+		.gradient-text{background:linear-gradient(90deg,#fff 15%,var(--cyan) 58%,var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}
+		.page-heading p{max-width:470px;margin:0;color:var(--muted);font-size:15px;line-height:1.7}
+		.heading-note{flex:none;padding:13px 16px;border:1px solid var(--line);border-radius:10px;background:rgba(15,23,42,.72);color:var(--muted);font-size:12px}
+		.heading-note strong{color:#fff}
+		.tabs{display:flex;gap:8px;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+		.tab{display:inline-flex;align-items:center;gap:9px;padding:11px 15px;border:1px solid transparent;border-radius:9px;color:var(--muted);font-size:13px;font-weight:800}
+		button.tab{background:transparent;cursor:pointer}
+		.tab.active{border-color:rgba(0,210,255,.28);background:rgba(0,210,255,.08);color:var(--cyan)}
+		.tab-count{display:grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:6px;background:rgba(255,255,255,.08);color:#fff;font-size:11px}
+		.toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+		.filters{display:flex;gap:8px;flex-wrap:wrap}
+		.filter{min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:rgba(5,8,17,.55);color:var(--muted);font-size:12px;font-weight:700;cursor:pointer}
+		.filter.selected{border-color:rgba(0,210,255,.42);color:var(--cyan)}
+		.listing-controls{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:-8px 0 26px}
+		.search-input,.sort-label select{min-height:40px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:rgba(5,8,17,.75);color:#fff}
+		.search-input{width:min(330px,100%)}
+		.search-input::placeholder{color:#94a3b8}
+		.sort-label{color:var(--muted);font-size:12px;white-space:nowrap}
+		.sort-label select{margin-left:7px}
+		button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+		.section-title{display:flex;align-items:center;gap:11px;margin:0 0 16px;font-size:19px}
+		.live-mark{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 12px rgba(255,42,75,.7)}
+		.tournaments{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+		.tournament{min-height:220px;display:flex;flex-direction:column;padding:19px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(5,8,17,.96));transition:transform .2s,border-color .2s}
+		.tournament:hover{transform:translateY(-3px);border-color:rgba(0,210,255,.42)}
+		.t-top,.t-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}
+		.tag{padding:6px 8px;border-radius:6px;background:rgba(255,42,75,.13);color:var(--red);font-size:10px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}
+		.tag.upcoming{background:rgba(0,210,255,.1);color:var(--cyan)}
+		.prize{font-size:14px;font-weight:900}
+		.tournament h3{margin:22px 0 7px;font-size:17px}
+		.meta{margin:0;color:var(--muted);font-size:12px}
+		.progress{height:5px;margin:17px 0 12px;border-radius:99px;background:#1e293b;overflow:hidden}
+		.progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--blue),var(--red))}
+		.t-bottom{margin-top:auto;color:var(--muted);font-size:11px}
+		.past-section{margin-top:58px;padding-top:30px;border-top:1px solid var(--line)}
+		.past .tournament{min-height:185px;background:linear-gradient(145deg,rgba(20,31,54,.7),rgba(5,8,17,.86))}
+		.past .tag{background:rgba(203,213,225,.1);color:var(--muted)}
+		.result{color:var(--cyan);font-size:11px;font-weight:800}
+		.empty-state{padding:24px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center}
+		.results-summary{min-height:18px;margin:16px 0 0;color:var(--muted);font-size:12px}
+		[hidden]{display:none!important}
+		@media(max-width:850px){
+			.nav-links{display:none}.page-heading{align-items:flex-start;flex-direction:column}.heading-note{display:none}
+			.tournaments{grid-template-columns:repeat(2,minmax(0,1fr))}
+		}
+		@media(max-width:560px){
+			.container{width:calc(100% - 28px)}.nav{height:68px}.logo{font-size:18px}.logo-mark{width:30px;height:30px}
+			.nav-actions .btn-ghost{display:none}main{padding:38px 0 65px}h1{font-size:44px;letter-spacing:-2px}
+			.page-heading p{font-size:14px}.tabs{gap:2px}.tab{padding:10px 9px;font-size:12px}
+			.toolbar,.listing-controls{align-items:stretch;flex-direction:column}.listing-controls{margin-top:0}.search-input{width:100%}
+			.sort-label{display:flex;align-items:center;justify-content:space-between}.sort-label select{flex:1}
+			.tournaments{grid-template-columns:1fr}.tournament{min-height:200px}
+		}
+		@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+	</style>
+</head>
+<body>
+	<header class="container nav">
+		<a class="logo" href="PaginaInicial.html" aria-label="NEXUS ARENA, página inicial"><span class="logo-mark" aria-hidden="true"></span>NEXUS ARENA</a>
+		<nav class="nav-links" aria-label="Navegação principal">
+			<a href="Comunidade.html">Equipas</a><a href="#disponiveis">Torneios</a><a href="PaginaInicial.html#ranking">Rankings</a><a href="Comunidade.html">Comunidade</a>
+		</nav>
+		<div class="nav-actions"><a class="btn btn-ghost" href="PaginaInicial.html">Página inicial</a><a class="btn btn-primary" href="login.html">Entrar</a></div>
+	</header>
+	<main class="container">
+		<section class="page-heading" aria-labelledby="page-title">
+			<div>
+				<div class="eyebrow">A agenda da arena</div>
+				<h1 id="page-title">Torneios <span class="gradient-text">CS2.</span></h1>
+				<p>Descobre os próximos desafios, acompanha os torneios em curso e consulta os resultados anteriores.</p>
+			</div>
+			<div class="heading-note"><strong id="agenda-count">06</strong> torneios na agenda</div>
+		</section>
+
+		<nav class="tabs" aria-label="Estado dos torneios">
+			<button class="tab active" type="button" data-view="available" aria-controls="disponiveis" aria-pressed="true">Em curso e futuros <span class="tab-count" id="available-count">03</span></button>
+			<button class="tab" type="button" data-view="completed" aria-controls="concluidos" aria-pressed="false">Concluídos <span class="tab-count" id="completed-count">03</span></button>
+		</nav>
+		<div class="listing-controls">
+			<label class="sr-only" for="tournament-search">Pesquisar torneios</label>
+			<input class="search-input" id="tournament-search" type="search" placeholder="Pesquisar por torneio ou região..." autocomplete="off">
+			<label class="sort-label" for="sort">Ordenar por
+				<select id="sort" name="sort"><option value="date">Data (mais próxima/recente)</option><option value="prize">Prémio (maior primeiro)</option></select>
+			</label>
+		</div>
+
+		<section id="disponiveis" aria-labelledby="available-title" aria-live="polite">
+			<div class="toolbar">
+				<div class="filters" aria-label="Filtros de torneio">
+					<button class="filter selected" type="button" data-status="all" aria-pressed="true">Todos</button>
+					<button class="filter" type="button" data-status="live" aria-pressed="false">Ao vivo</button>
+					<button class="filter" type="button" data-status="upcoming" aria-pressed="false">Futuros</button>
+				</div>
+			</div>
+			<h2 class="section-title" id="available-title"><span class="live-mark" aria-hidden="true"></span>Disponíveis para jogar</h2>
+			<div class="tournaments" id="available-list">
+				<article class="tournament" data-start="2026-10-08T00:00:00+01:00" data-end="2026-10-10T23:59:59+01:00" data-prize="2500">
+					<div class="t-top"><span class="tag">Ao vivo</span><span class="prize">€2.500</span></div>
+					<h3>Nightfall Open #18</h3><p class="meta">Counter-Strike 2 · Europa</p>
+					<div class="progress" aria-label="48 de 64 equipas inscritas"><span style="width:75%"></span></div>
+					<div class="t-bottom"><span>48 / 64 equipas</span><span class="event-time">Em curso</span></div>
+				</article>
+				<article class="tournament" data-start="2026-10-10T19:30:00+01:00" data-end="2026-10-10T22:30:00+01:00" data-prize="1000">
+					<div class="t-top"><span class="tag upcoming">A começar</span><span class="prize">€1.000</span></div>
+					<h3>Midnight Rush</h3><p class="meta">Counter-Strike 2 · PT / ES</p>
+					<div class="progress" aria-label="27 de 32 equipas inscritas"><span style="width:84%"></span></div>
+					<div class="t-bottom"><span>27 / 32 equipas</span><time class="event-time" datetime="2026-10-10T19:30:00+01:00">10 Out · 19:30</time></div>
+				</article>
+				<article class="tournament" data-start="2026-10-11T21:00:00+01:00" data-end="2026-10-11T23:59:00+01:00" data-prize="750">
+					<div class="t-top"><span class="tag upcoming">A começar</span><span class="prize">€750</span></div>
+					<h3>Neon Clash</h3><p class="meta">Counter-Strike 2 · América do Norte</p>
+					<div class="progress" aria-label="19 de 64 equipas inscritas"><span style="width:30%"></span></div>
+					<div class="t-bottom"><span>19 / 64 equipas</span><time class="event-time" datetime="2026-10-11T21:00:00+01:00">11 Out · 21:00</time></div>
+				</article>
+			</div>
+			<p class="empty-state" id="available-empty" hidden>Não foram encontrados torneios com estes critérios.</p>
+		</section>
+
+		<section class="past-section past" id="concluidos" aria-labelledby="past-title" hidden aria-live="polite">
+			<div class="toolbar"><div class="kicker">Arquivo da arena</div><span class="sort-label">Resultados e classificações</span></div>
+			<h2 class="section-title" id="past-title">Torneios concluídos</h2>
+			<div class="tournaments" id="completed-list">
+				<article class="tournament" data-start="2026-09-10T10:00:00+01:00" data-end="2026-09-12T22:00:00+01:00" data-prize="5000">
+					<div class="t-top"><span class="tag">Concluído</span><span class="prize">€5.000</span></div>
+					<h3>Winter Major 2026</h3><p class="meta">Counter-Strike 2 · Europa · 12 Set 2026</p>
+					<div class="t-bottom"><span>64 equipas</span><span class="result">Vencedor: Team placeholder</span></div>
+				</article>
+				<article class="tournament" data-start="2026-08-26T10:00:00+01:00" data-end="2026-08-28T22:00:00+01:00" data-prize="1500">
+					<div class="t-top"><span class="tag">Concluído</span><span class="prize">€1.500</span></div>
+					<h3>Summer Showdown</h3><p class="meta">Counter-Strike 2 · PT / ES · 28 Ago 2026</p>
+					<div class="t-bottom"><span>32 equipas</span><span class="result">Vencedor: Equipa placeholder</span></div>
+				</article>
+				<article class="tournament" data-start="2026-08-08T10:00:00+01:00" data-end="2026-08-10T22:00:00+01:00" data-prize="800">
+					<div class="t-top"><span class="tag">Concluído</span><span class="prize">€800</span></div>
+					<h3>Rookie Arena #07</h3><p class="meta">Counter-Strike 2 · Europa · 10 Ago 2026</p>
+					<div class="t-bottom"><span>16 equipas</span><span class="result">Vencedor: Nome da equipa</span></div>
+				</article>
+			</div>
+			<p class="empty-state" id="completed-empty" hidden>Não foram encontrados torneios com esta pesquisa.</p>
+		</section>
+		<p class="results-summary" id="results-summary" role="status" aria-live="polite"></p>
+	</main>
+	<footer class="container" style="padding:0 0 32px;color:var(--muted);font-size:12px">
+		<div style="border-top:1px solid var(--line);padding-top:20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap"><span>© 2026 NEXUS ARENA</span><a href="PaginaInicial.html">Voltar à página inicial</a></div>
+	</footer>
+	<script>
+		const viewButtons = [...document.querySelectorAll("[data-view]")];
+		const statusButtons = [...document.querySelectorAll("[data-status]")];
+		const availableSection = document.querySelector("#disponiveis");
+		const completedSection = document.querySelector("#concluidos");
+		const searchInput = document.querySelector("#tournament-search");
+		const sortSelect = document.querySelector("#sort");
+		const resultsSummary = document.querySelector("#results-summary");
+		const tournaments = [...document.querySelectorAll(".tournament")];
+		let currentView = "available";
+		let currentStatus = "all";
+
+		function updateTournamentStates() {
+			const now = Date.now();
+			tournaments.forEach((tournament) => {
+				const start = Date.parse(tournament.dataset.start);
+				const end = Date.parse(tournament.dataset.end);
+				const state = now < start ? "upcoming" : now <= end ? "live" : "completed";
+				tournament.dataset.state = state;
+				if (tournament.closest("#available-list")) {
+					const tag = tournament.querySelector(".tag");
+					const time = tournament.querySelector(".event-time");
+					tag.textContent = state === "live" ? "Ao vivo" : state === "upcoming" ? "A começar" : "Concluído";
+					tag.classList.toggle("upcoming", state !== "live");
+					if (state === "live") time.textContent = "Em curso";
+					if (state === "completed") {
+						time.textContent = "Resultado placeholder";
+						time.classList.add("result");
+						tournament.querySelector(".progress").hidden = true;
+					}
+				}
+			});
+		}
+
+		function renderTournaments() {
+			const showingAvailable = currentView === "available";
+			const section = showingAvailable ? availableSection : completedSection;
+			const list = section.querySelector(".tournaments");
+			const emptyState = section.querySelector(".empty-state");
+			const query = searchInput.value.trim().toLocaleLowerCase("pt");
+			const visible = tournaments.filter((tournament) => {
+				const inCurrentView = showingAvailable
+					? tournament.dataset.state !== "completed"
+					: tournament.dataset.state === "completed";
+				const matchesStatus = !showingAvailable || currentStatus === "all" || tournament.dataset.state === currentStatus;
+				const matchesSearch = tournament.textContent.toLocaleLowerCase("pt").includes(query);
+				return inCurrentView && matchesStatus && matchesSearch;
+			});
+			visible.sort((first, second) => {
+				if (sortSelect.value === "prize") return Number(second.dataset.prize) - Number(first.dataset.prize);
+				const difference = Date.parse(first.dataset.start) - Date.parse(second.dataset.start);
+				return showingAvailable ? difference : -difference;
+			});
+			list.replaceChildren(...visible);
+			emptyState.hidden = visible.length > 0;
+			availableSection.hidden = !showingAvailable;
+			completedSection.hidden = showingAvailable;
+			viewButtons.forEach((button) => {
+				const isActive = button.dataset.view === currentView;
+				button.classList.toggle("active", isActive);
+				button.setAttribute("aria-pressed", String(isActive));
+			});
+			const availableCount = tournaments.filter((tournament) => tournament.dataset.state !== "completed").length;
+			const completedCount = tournaments.length - availableCount;
+			document.querySelector("#available-count").textContent = String(availableCount).padStart(2, "0");
+			document.querySelector("#completed-count").textContent = String(completedCount).padStart(2, "0");
+			document.querySelector("#agenda-count").textContent = String(tournaments.length).padStart(2, "0");
+			const count = showingAvailable ? availableCount : completedCount;
+			resultsSummary.textContent = `${visible.length} de ${count} torneios apresentados.`;
+		}
+
+		viewButtons.forEach((button) => button.addEventListener("click", () => {
+			currentView = button.dataset.view;
+			currentStatus = "all";
+			statusButtons.forEach((statusButton) => {
+				const isActive = statusButton.dataset.status === "all";
+				statusButton.classList.toggle("selected", isActive);
+				statusButton.setAttribute("aria-pressed", String(isActive));
+			});
+			renderTournaments();
+		}));
+		statusButtons.forEach((button) => button.addEventListener("click", () => {
+			currentStatus = button.dataset.status;
+			statusButtons.forEach((statusButton) => {
+				const isActive = statusButton === button;
+				statusButton.classList.toggle("selected", isActive);
+				statusButton.setAttribute("aria-pressed", String(isActive));
+			});
+			renderTournaments();
+		}));
+		searchInput.addEventListener("input", renderTournaments);
+		sortSelect.addEventListener("change", renderTournaments);
+		updateTournamentStates();
+		renderTournaments();
+	</script>
+</body>
+</html>

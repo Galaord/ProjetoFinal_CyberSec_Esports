@@ -337,7 +337,9 @@
 		.footer-links{display:flex;gap:20px}
 
 		@media(max-width:900px){
-			.nav-links{display:none}.nav-actions{display:none}.mobile-menu{display:block;background:none;border:0;color:white;font-size:24px}
+			.nav-links{display:none}.nav-links.open{display:flex;position:absolute;top:68px;left:0;right:0;flex-direction:column;gap:0;padding:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 36px rgba(0,0,0,.4)}
+			.nav-links.open a{padding:14px;border-radius:8px}.nav-links.open a:hover{background:rgba(255,255,255,.05)}
+			.nav-actions{display:none}.mobile-menu{display:block;background:none;border:0;color:white;font-size:24px;cursor:pointer}
 			.controls-bar{flex-direction:column;align-items:stretch}
 			.search-filter{max-width:100%}
 		}
@@ -352,17 +354,17 @@
 
 <header class="container nav">
 	<a class="logo" href="PaginaInicial.html"><span class="logo-mark"></span>NEXUS ARENA</a>
-	<nav class="nav-links">
+	<nav class="nav-links" id="primary-navigation" aria-label="Navegação principal">
 		<a href="PaginaInicial.html#jogos">Jogos</a>
 		<a href="PaginaInicial.html#torneios">Torneios</a>
 		<a href="PaginaInicial.html#ranking">Rankings</a>
-		<a href="comunidade.html" class="active">Comunidade</a>
+		<a href="Comunidade.html" class="active" aria-current="page">Comunidade</a>
 	</nav>
 	<div class="nav-actions">
 		<a class="btn btn-ghost" href="PaginaInicial.html#torneios">Explorar</a>
 		<a class="btn btn-primary" href="login.html">Entrar</a>
 	</div>
-	<button class="mobile-menu" aria-label="Menu">☰</button>
+	<button class="mobile-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-navigation">☰</button>
 </header>
 
 <main class="container">
@@ -481,6 +483,23 @@
 	const modalTeamTournaments = document.getElementById("modal-team-tournaments");
 	const modalTeamWinrate = document.getElementById("modal-team-winrate");
 	const modalRosterList = document.getElementById("modal-roster-list");
+	const mobileMenu = document.querySelector(".mobile-menu");
+	const primaryNavigation = document.getElementById("primary-navigation");
+
+	mobileMenu.addEventListener("click", () => {
+		const isOpen = mobileMenu.getAttribute("aria-expanded") === "true";
+		mobileMenu.setAttribute("aria-expanded", String(!isOpen));
+		mobileMenu.setAttribute("aria-label", isOpen ? "Abrir menu" : "Fechar menu");
+		primaryNavigation.classList.toggle("open", !isOpen);
+	});
+
+	primaryNavigation.addEventListener("click", (event) => {
+		if (event.target.closest("a")) {
+			mobileMenu.setAttribute("aria-expanded", "false");
+			mobileMenu.setAttribute("aria-label", "Abrir menu");
+			primaryNavigation.classList.remove("open");
+		}
+	});
 
 	btnTabTeams.addEventListener("click", () => {
 		btnTabTeams.classList.add("active");
