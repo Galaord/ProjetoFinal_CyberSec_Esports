@@ -47,7 +47,7 @@ Por fim, voltar ao CMD e executar o comando:
 ```
 python manage.py runserver
 ```
-Depois é só aceder no browser: *http://127.0.0.1:8000/*
+Depois é só aceder no browser: http://127.0.0.1:8000/
 
 Para desligar o servidor do Django basta pressionar as teclas **Ctrl** + **C** no CMD. Para o voltar a ligar é só repetir o comando anterior desde que não feche o CMD.
 
