@@ -1,0 +1,620 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#050811">
+	<title>Comunidade | NEXUS ARENA</title>
+	<style>
+		:root{
+			--bg:#050811;
+			--bg2:#0a0f1d;
+			--panel:#0f172a;
+			--panel2:#141f36;
+			--text:#ffffff;
+			--muted:#cbd5e1;
+			--red:#ff2a4b;
+			--blue:#0066ff;
+			--cyan:#00d2ff;
+			--line:rgba(255,255,255,.12);
+			--radius:22px;
+		}
+		*{box-sizing:border-box}
+		html{scroll-behavior:smooth}
+		body{
+			margin:0;
+			background:
+				radial-gradient(circle at 78% 12%,rgba(0,102,255,.22),transparent 35%),
+				radial-gradient(circle at 10% 30%,rgba(255,42,75,.20),transparent 35%),
+				linear-gradient(180deg,#04060d 0%,#080d1a 45%,#050811 100%);
+			color:var(--text);
+			font-family:Inter,system-ui,sans-serif;
+			min-height:100vh;
+			display:flex;
+			flex-direction:column;
+		}
+		a{text-decoration:none;color:inherit}
+		button,input,select{font:inherit}
+		.container{width:min(1180px,calc(100% - 40px));margin:auto}
+		
+		.nav{
+			height:78px;
+			display:flex;
+			align-items:center;
+			justify-content:space-between;
+			position:relative;
+			z-index:10;
+		}
+		.logo{font-weight:900;letter-spacing:-1px;font-size:21px;display:flex;gap:10px;align-items:center;color:#ffffff}
+		.logo-mark{
+			width:34px;height:34px;border-radius:10px;
+			background:linear-gradient(135deg,var(--red),var(--blue));
+			transform:skew(-12deg);box-shadow:0 0 30px rgba(255,42,75,.4)
+		}
+		.nav-links{display:flex;gap:30px;color:#ffffff;font-size:14px;font-weight:600}
+		.nav-links a:hover,.nav-links a.active{color:var(--cyan)}
+		.nav-actions{display:flex;gap:10px;align-items:center}
+		.btn{
+			display:inline-flex;align-items:center;justify-content:center;gap:8px;
+			border:1px solid var(--line);border-radius:10px;padding:12px 18px;
+			font-weight:800;font-size:14px;cursor:pointer;transition:.2s;color:#ffffff;
+			background:transparent;
+		}
+		.btn:hover{transform:translateY(-2px)}
+		.btn-ghost{background:rgba(255,255,255,.05)}
+		.btn-primary{
+			color:#fff;border:0;background:linear-gradient(100deg,var(--red),var(--blue));
+			box-shadow:0 10px 35px rgba(0,102,255,.3)
+		}
+		.mobile-menu{display:none}
+
+		main{flex:1;padding-bottom:80px}
+		
+		.page-header{
+			padding:40px 0 20px;
+			text-align:center;
+		}
+		.eyebrow{color:var(--red);font-size:12px;font-weight:900;letter-spacing:2.2px;text-transform:uppercase;margin-bottom:12px}
+		h1{font-size:clamp(36px,5vw,58px);line-height:1;letter-spacing:-3px;margin:0 0 16px;color:#ffffff}
+		.gradient-text{background:linear-gradient(90deg,#ffffff 20%,var(--cyan) 55%,var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}
+		.page-desc{color:var(--muted);font-size:16px;max-width:560px;margin:0 auto;line-height:1.6}
+
+		.controls-bar{
+			display:flex;
+			gap:16px;
+			justify-content:space-between;
+			align-items:center;
+			margin:40px 0 30px;
+			flex-wrap:wrap;
+		}
+		.tabs{
+			display:flex;
+			gap:8px;
+			background:rgba(15,23,42,.8);
+			padding:5px;
+			border-radius:12px;
+			border:1px solid var(--line);
+		}
+		.tab-btn{
+			padding:10px 20px;
+			border-radius:8px;
+			border:0;
+			background:transparent;
+			color:var(--muted);
+			font-weight:700;
+			font-size:14px;
+			cursor:pointer;
+			transition:.2s;
+		}
+		.tab-btn.active{
+			background:linear-gradient(100deg,var(--red),var(--blue));
+			color:#fff;
+		}
+		
+		.search-filter{
+			display:flex;
+			gap:12px;
+			flex:1;
+			max-width:500px;
+		}
+		.search-input{
+			width:100%;
+			height:44px;
+			padding:0 16px;
+			border:1px solid var(--line);
+			border-radius:10px;
+			background:rgba(5,8,17,.8);
+			color:#fff;
+			outline:none;
+			transition:border-color .2s;
+		}
+		.search-input:focus{border-color:var(--cyan)}
+		.filter-select{
+			height:44px;
+			padding:0 12px;
+			border:1px solid var(--line);
+			border-radius:10px;
+			background:rgba(5,8,17,.8);
+			color:#fff;
+			outline:none;
+			cursor:pointer;
+		}
+
+		.view-section{display:none}
+		.view-section.active{display:block}
+
+		.grid-teams{
+			display:grid;
+			grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+			gap:20px;
+		}
+		.team-card{
+			border:1px solid var(--line);
+			border-radius:18px;
+			background:linear-gradient(145deg,rgba(15,23,42,.9),rgba(5,8,17,.95));
+			padding:20px;
+			display:flex;
+			flex-direction:column;
+			gap:16px;
+			transition:.25s;
+			cursor:pointer;
+			position:relative;
+			overflow:hidden;
+		}
+		.team-card:hover{
+			transform:translateY(-5px);
+			border-color:var(--cyan);
+			box-shadow:0 10px 30px rgba(0,210,255,.1);
+		}
+		.team-header{
+			display:flex;
+			align-items:center;
+			gap:14px;
+		}
+		.team-icon{
+			width:48px;
+			height:48px;
+			border-radius:12px;
+			background:rgba(255,255,255,.05);
+			border:1px solid var(--line);
+			display:grid;
+			place-items:center;
+			font-size:22px;
+			color:var(--cyan);
+			flex-shrink:0;
+		}
+		.team-info h3{
+			margin:0 0 4px;
+			font-size:18px;
+			color:#fff;
+		}
+		.team-info p{
+			margin:0;
+			font-size:12px;
+			color:var(--muted);
+		}
+		.team-stats{
+			display:grid;
+			grid-template-columns:1fr 1fr;
+			gap:10px;
+			background:rgba(5,8,17,.5);
+			padding:12px;
+			border-radius:10px;
+			border:1px solid rgba(255,255,255,.05);
+		}
+		.team-stat{
+			display:flex;
+			flex-direction:column;
+		}
+		.team-stat-val{
+			font-weight:900;
+			font-size:16px;
+			color:#fff;
+		}
+		.team-stat-lbl{
+			font-size:10px;
+			color:var(--muted);
+			text-transform:uppercase;
+		}
+		.team-roster{
+			display:flex;
+			gap:6px;
+			align-items:center;
+		}
+		.roster-avatar{
+			width:28px;
+			height:28px;
+			border-radius:50%;
+			background:var(--panel2);
+			border:1px solid var(--line);
+			display:grid;
+			place-items:center;
+			font-size:10px;
+			font-weight:800;
+			color:#fff;
+		}
+
+		.players-table-wrap{
+			border:1px solid var(--line);
+			border-radius:18px;
+			background:linear-gradient(145deg,rgba(15,23,42,.9),rgba(5,8,17,.95));
+			overflow:hidden;
+		}
+		.players-table{
+			width:100%;
+			border-collapse:collapse;
+			text-align:left;
+		}
+		.players-table th,.players-table td{
+			padding:16px 20px;
+			border-bottom:1px solid var(--line);
+		}
+		.players-table th{
+			background:rgba(5,8,17,.6);
+			font-size:12px;
+			color:var(--muted);
+			text-transform:uppercase;
+			letter-spacing:1px;
+		}
+		.players-table tr:last-child td{border-bottom:0}
+		.players-table tr:hover td{background:rgba(255,255,255,.02)}
+		.player-cell{
+			display:flex;
+			align-items:center;
+			gap:12px;
+			font-weight:800;
+		}
+		.player-avatar{
+			width:36px;
+			height:36px;
+			border-radius:10px;
+			background:linear-gradient(135deg,var(--blue),var(--cyan));
+			display:grid;
+			place-items:center;
+			font-size:14px;
+			color:#fff;
+		}
+		.badge-role{
+			display:inline-block;
+			padding:4px 8px;
+			border-radius:6px;
+			font-size:11px;
+			font-weight:700;
+			background:rgba(0,210,255,.1);
+			color:var(--cyan);
+			border:1px solid rgba(0,210,255,.2);
+		}
+
+		.modal-overlay{
+			position:fixed;
+			inset:0;
+			background:rgba(4,6,13,.85);
+			backdrop-filter:blur(8px);
+			display:none;
+			place-items:center;
+			z-index:100;
+			padding:20px;
+		}
+		.modal-overlay.active{display:grid}
+		.modal-card{
+			background:linear-gradient(145deg,#0f172a,#050811);
+			border:1px solid var(--line);
+			border-radius:22px;
+			width:min(550px,100%);
+			padding:30px;
+			position:relative;
+			box-shadow:0 25px 50px rgba(0,0,0,.5);
+		}
+		.modal-close{
+			position:absolute;
+			top:20px;
+			right:20px;
+			background:transparent;
+			border:0;
+			color:var(--muted);
+			font-size:20px;
+			cursor:pointer;
+		}
+		.modal-close:hover{color:#fff}
+		.modal-title{margin:0 0 6px;font-size:24px;color:#fff}
+		.modal-subtitle{margin:0 0 20px;color:var(--muted);font-size:13px}
+		.roster-list{
+			display:grid;
+			gap:10px;
+			margin-top:15px;
+		}
+		.roster-item{
+			display:flex;
+			justify-content:space-between;
+			align-items:center;
+			padding:10px 14px;
+			background:rgba(5,8,17,.6);
+			border-radius:10px;
+			border:1px solid var(--line);
+		}
+
+		footer{padding:35px 0 50px;color:var(--muted);font-size:12px;margin-top:auto}
+		.footer-inner{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--line);padding-top:25px}
+		.footer-links{display:flex;gap:20px}
+
+		@media(max-width:900px){
+			.nav-links{display:none}.nav-links.open{display:flex;position:absolute;top:68px;left:0;right:0;flex-direction:column;gap:0;padding:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 36px rgba(0,0,0,.4)}
+			.nav-links.open a{padding:14px;border-radius:8px}.nav-links.open a:hover{background:rgba(255,255,255,.05)}
+			.nav-actions{display:none}.mobile-menu{display:block;background:none;border:0;color:white;font-size:24px;cursor:pointer}
+			.controls-bar{flex-direction:column;align-items:stretch}
+			.search-filter{max-width:100%}
+		}
+		@media(max-width:560px){
+			.container{width:min(100% - 28px,1180px)}
+			.footer-inner{display:block}.footer-links{margin-top:15px;flex-wrap:wrap}
+			.players-table th:nth-child(3),.players-table td:nth-child(3){display:none}
+		}
+	</style>
+</head>
+<body>
+
+<header class="container nav">
+	<a class="logo" href="PaginaInicial.html"><span class="logo-mark"></span>NEXUS ARENA</a>
+	<nav class="nav-links" id="primary-navigation" aria-label="Navegação principal">
+		<a href="PaginaInicial.html#jogos">Jogos</a>
+		<a href="PaginaInicial.html#torneios">Torneios</a>
+		<a href="PaginaInicial.html#ranking">Rankings</a>
+		<a href="Comunidade.html" class="active" aria-current="page">Comunidade</a>
+	</nav>
+	<div class="nav-actions">
+		<a class="btn btn-ghost" href="PaginaInicial.html#torneios">Explorar</a>
+		<a class="btn btn-primary" href="login.html">Entrar</a>
+	</div>
+	<button class="mobile-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-navigation">☰</button>
+</header>
+
+<main class="container">
+	<section class="page-header">
+		<div class="eyebrow">Hub da Comunidade</div>
+		<h1>Equipas & <span class="gradient-text">Jogadores</span></h1>
+		<p class="page-desc">Explora as equipas ativas, descobre novos talentos e consulta os planteis da NEXUS ARENA.</p>
+	</section>
+
+	<div class="controls-bar">
+		<div class="tabs">
+			<button class="tab-btn active" id="btn-tab-teams">Equipas</button>
+			<button class="tab-btn" id="btn-tab-players">Jogadores</button>
+		</div>
+
+		<div class="search-filter">
+			<input type="text" class="search-input" id="search-input" placeholder="Pesquisar equipa ou jogador...">
+			<select class="filter-select" id="region-filter">
+				<option value="ALL">Todas as Regiões</option>
+				<option value="EU">EU</option>
+				<option value="PT/ES">PT / ES</option>
+				<option value="NA">NA</option>
+			</select>
+		</div>
+	</div>
+
+	<section class="view-section active" id="section-teams">
+		<div class="grid-teams" id="teams-container"></div>
+	</section>
+
+	<section class="view-section" id="section-players">
+		<div class="players-table-wrap">
+			<table class="players-table">
+				<thead>
+					<tr>
+						<th>Jogador</th>
+						<th>Equipa</th>
+						<th>Função</th>
+						<th>Região</th>
+						<th>K/D Ratio</th>
+					</tr>
+				</thead>
+				<tbody id="players-container"></tbody>
+			</table>
+		</div>
+	</section>
+</main>
+
+<div class="modal-overlay" id="team-modal">
+	<div class="modal-card">
+		<button class="modal-close" id="modal-close">✕</button>
+		<h2 class="modal-title" id="modal-team-name">Nome da Equipa</h2>
+		<p class="modal-subtitle" id="modal-team-region">Região</p>
+		
+		<div class="team-stats" style="margin-bottom: 20px;">
+			<div class="team-stat">
+				<span class="team-stat-val" id="modal-team-tournaments">0</span>
+				<span class="team-stat-lbl">Torneios</span>
+			</div>
+			<div class="team-stat">
+				<span class="team-stat-val" id="modal-team-winrate">0%</span>
+				<span class="team-stat-lbl">Win Rate</span>
+			</div>
+		</div>
+
+		<h4 style="margin: 0 0 10px; color: #fff;">Lineup / Jogadores</h4>
+		<div class="roster-list" id="modal-roster-list"></div>
+	</div>
+</div>
+
+<footer>
+	<div class="container footer-inner">
+		<span>© 2026 NEXUS ARENA</span>
+		<div class="footer-links">
+			<a href="#">Termos de serviço</a>
+			<a href="#">Privacidade</a>
+		</div>
+	</div>
+</footer>
+
+<script>
+	const teamsData = [
+		{ id: 1, name: "Team Falcon", icon: "◈", region: "EU", tournaments: 128, winrate: "68%", players: ["S1mple_CS", "Niko_R", "ZywOo_K", "Device_A", "B1t_G"] },
+		{ id: 2, name: "Bad Piggies", icon: "✦", region: "PT/ES", tournaments: 85, winrate: "59%", players: ["FOX_PT", "MUTiRiS", "rmn_1", "STABN", "JUST_1"] },
+		{ id: 3, name: "Cynical Legends", icon: "△", region: "EU", tournaments: 62, winrate: "54%", players: ["Hunter_99", "M0nesy_X", "Rain_P", "Karrigan_C", "Ropz_S"] },
+		{ id: 4, name: "Digital Lakers", icon: "◆", region: "NA", tournaments: 40, winrate: "48%", players: ["EliGE_1", "Twistzz_A", "NAF_K", "Grim_R", "JT_S"] },
+		{ id: 5, name: "Viper Esports", icon: "🐍", region: "PT/ES", tournaments: 31, winrate: "51%", players: ["Shadow_1", "Vortex_X", "Blade_R", "Kratos_9", "Apex_M"] },
+		{ id: 6, name: "Alpha Squad", icon: "⚡", region: "NA", tournaments: 19, winrate: "42%", players: ["Bolt_T", "Flash_G", "Storm_Z", "Rage_B", "Doom_K"] }
+	];
+
+	const playersData = [
+		{ name: "S1mple_CS", team: "Team Falcon", role: "AWPer", region: "EU", kd: "1.34" },
+		{ name: "FOX_PT", team: "Bad Piggies", role: "AWPer", region: "PT/ES", kd: "1.18" },
+		{ name: "ZywOo_K", team: "Team Falcon", role: "Rifler", region: "EU", kd: "1.30" },
+		{ name: "MUTiRiS", team: "Bad Piggies", role: "In-Game Leader", region: "PT/ES", kd: "1.05" },
+		{ name: "M0nesy_X", team: "Cynical Legends", role: "AWPer", region: "EU", kd: "1.28" },
+		{ name: "Twistzz_A", team: "Digital Lakers", role: "Rifler", region: "NA", kd: "1.15" },
+		{ name: "Shadow_1", team: "Viper Esports", role: "Entry Fragger", region: "PT/ES", kd: "1.08" },
+		{ name: "Bolt_T", team: "Alpha Squad", role: "Support", region: "NA", kd: "0.98" }
+	];
+
+	const teamsContainer = document.getElementById("teams-container");
+	const playersContainer = document.getElementById("players-container");
+	const searchInput = document.getElementById("search-input");
+	const regionFilter = document.getElementById("region-filter");
+	
+	const btnTabTeams = document.getElementById("btn-tab-teams");
+	const btnTabPlayers = document.getElementById("btn-tab-players");
+	const sectionTeams = document.getElementById("section-teams");
+	const sectionPlayers = document.getElementById("section-players");
+
+	const modal = document.getElementById("team-modal");
+	const modalClose = document.getElementById("modal-close");
+	const modalTeamName = document.getElementById("modal-team-name");
+	const modalTeamRegion = document.getElementById("modal-team-region");
+	const modalTeamTournaments = document.getElementById("modal-team-tournaments");
+	const modalTeamWinrate = document.getElementById("modal-team-winrate");
+	const modalRosterList = document.getElementById("modal-roster-list");
+	const mobileMenu = document.querySelector(".mobile-menu");
+	const primaryNavigation = document.getElementById("primary-navigation");
+
+	mobileMenu.addEventListener("click", () => {
+		const isOpen = mobileMenu.getAttribute("aria-expanded") === "true";
+		mobileMenu.setAttribute("aria-expanded", String(!isOpen));
+		mobileMenu.setAttribute("aria-label", isOpen ? "Abrir menu" : "Fechar menu");
+		primaryNavigation.classList.toggle("open", !isOpen);
+	});
+
+	primaryNavigation.addEventListener("click", (event) => {
+		if (event.target.closest("a")) {
+			mobileMenu.setAttribute("aria-expanded", "false");
+			mobileMenu.setAttribute("aria-label", "Abrir menu");
+			primaryNavigation.classList.remove("open");
+		}
+	});
+
+	btnTabTeams.addEventListener("click", () => {
+		btnTabTeams.classList.add("active");
+		btnTabPlayers.classList.remove("active");
+		sectionTeams.classList.add("active");
+		sectionPlayers.classList.remove("active");
+	});
+
+	btnTabPlayers.addEventListener("click", () => {
+		btnTabPlayers.classList.add("active");
+		btnTabTeams.classList.remove("active");
+		sectionPlayers.classList.add("active");
+		sectionTeams.classList.remove("active");
+	});
+
+	function renderTeams() {
+		const query = searchInput.value.toLowerCase();
+		const region = regionFilter.value;
+
+		const filtered = teamsData.filter(team => {
+			const matchesSearch = team.name.toLowerCase().includes(query);
+			const matchesRegion = region === "ALL" || team.region === region;
+			return matchesSearch && matchesRegion;
+		});
+
+		teamsContainer.innerHTML = filtered.map(team => `
+			<div class="team-card" onclick="openTeamModal(${team.id})">
+				<div class="team-header">
+					<div class="team-icon">${team.icon}</div>
+					<div class="team-info">
+						<h3>${team.name}</h3>
+						<p>Região: ${team.region}</p>
+					</div>
+				</div>
+				<div class="team-stats">
+					<div class="team-stat">
+						<span class="team-stat-val">${team.tournaments}</span>
+						<span class="team-stat-lbl">Torneios</span>
+					</div>
+					<div class="team-stat">
+						<span class="team-stat-val">${team.winrate}</span>
+						<span class="team-stat-lbl">Win Rate</span>
+					</div>
+				</div>
+				<div class="team-roster">
+					${team.players.slice(0, 4).map(p => `<div class="roster-avatar" title="${p}">${p.substring(0,2)}</div>`).join('')}
+					${team.players.length > 4 ? `<div class="roster-avatar">+${team.players.length - 4}</div>` : ''}
+				</div>
+			</div>
+		`).join('');
+	}
+
+	function renderPlayers() {
+		const query = searchInput.value.toLowerCase();
+		const region = regionFilter.value;
+
+		const filtered = playersData.filter(player => {
+			const matchesSearch = player.name.toLowerCase().includes(query) || player.team.toLowerCase().includes(query);
+			const matchesRegion = region === "ALL" || player.region === region;
+			return matchesSearch && matchesRegion;
+		});
+
+		playersContainer.innerHTML = filtered.map(player => `
+			<tr>
+				<td>
+					<div class="player-cell">
+						<div class="player-avatar">${player.name.substring(0, 2).toUpperCase()}</div>
+						<span>${player.name}</span>
+					</div>
+				</td>
+				<td>${player.team}</td>
+				<td><span class="badge-role">${player.role}</span></td>
+				<td>${player.region}</td>
+				<td><strong>${player.kd}</strong></td>
+			</tr>
+		`).join('');
+	}
+
+	function openTeamModal(teamId) {
+		const team = teamsData.find(t => t.id === teamId);
+		if (!team) return;
+
+		modalTeamName.textContent = team.name;
+		modalTeamRegion.textContent = `Região: ${team.region}`;
+		modalTeamTournaments.textContent = team.tournaments;
+		modalTeamWinrate.textContent = team.winrate;
+
+		modalRosterList.innerHTML = team.players.map(player => `
+			<div class="roster-item">
+				<span style="font-weight: 700; color: #fff;">${player}</span>
+				<span class="badge-role">Jogador</span>
+			</div>
+		`).join('');
+
+		modal.classList.add("active");
+	}
+
+	modalClose.addEventListener("click", () => modal.classList.remove("active"));
+	modal.addEventListener("click", (e) => {
+		if (e.target === modal) modal.classList.remove("active");
+	});
+
+	searchInput.addEventListener("input", () => {
+		renderTeams();
+		renderPlayers();
+	});
+
+	regionFilter.addEventListener("change", () => {
+		renderTeams();
+		renderPlayers();
+	});
+
+	renderTeams();
+	renderPlayers();
+</script>
+
+</body>
+</html>
