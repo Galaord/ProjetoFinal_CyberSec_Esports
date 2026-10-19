@@ -9,3 +9,4 @@ Objetivo 2: Desenvolver a arquitetura base do website e da base de dados mitigan
 Objetivo 3: Implementar monitorização ativa com uma ferramenta SIEM e estabelecer um plano documentado de resposta a incidentes (playbook).
 
 Objetivo 4: Testar a segurança de forma adversária e conduzir recolhas de evidências forenses através da análise detalhada de logs e metadados.
+a
