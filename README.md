@@ -51,7 +51,7 @@ Depois é só aceder no browser: http://127.0.0.1:8000/
 
 Para desligar o servidor do Django basta pressionar as teclas **Ctrl** + **C** no CMD. Para o voltar a ligar é só repetir o comando anterior desde que não feche o CMD.
 
-Sempre que fecharem o CMD tem que executar os seguintes comandos:
+Sempre que fecharem o CMD tem que executar os seguintes comandos para correr de novo:
 
 Primeiro navegar até à pasta do projeto (O vosso caminho e o nome da pasta pode ser diferente).
 ```
