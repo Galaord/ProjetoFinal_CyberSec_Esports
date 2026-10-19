@@ -2,6 +2,7 @@ To do list - Website
 
 Diogo: Adicionei a pagina teste.html só para ver se a ligação à base de dados estava a funcionar. Se quiserem aceder a esta página tem a ligação no fundo da pagina inicial (em Privacidade).
 Deve aparecer a tabela de Equipas com todos os seus dados.
+Por agora só conseguem aceder a outras páginas através da página inicial, depois eu faço a ligação em todas as outras páginas.
 
 Joana: 
 
