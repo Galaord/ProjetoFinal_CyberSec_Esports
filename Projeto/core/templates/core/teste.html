@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teste BD | NEXUS ARENA</title>
+    <style>
+        :root{
+            --bg:#050811; --panel:#0f172a; --text:#ffffff; --muted:#cbd5e1;
+            --red:#ff2a4b; --blue:#0066ff; --cyan:#00d2ff; --line:rgba(255,255,255,.12);
+        }
+        body{
+            margin:0; min-height:100vh; background:var(--bg); color:var(--text);
+            font-family:Inter,system-ui,sans-serif; padding: 40px;
+        }
+        .container{width:min(900px, 100%); margin:auto;}
+        h1{font-size: 28px; margin-bottom: 20px;}
+        table{width:100%; border-collapse: collapse; background:var(--panel); border:1px solid var(--line); border-radius: 12px; overflow: hidden;}
+        th, td{padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--line);}
+        th{background: rgba(5,8,17,.8); font-size: 12px; text-transform: uppercase; color: var(--muted);}
+        tr:last-child td{border-bottom: 0;}
+        tr:hover td{background: rgba(255,255,255,.02);}
+        .back-btn{display:inline-block; margin-top: 20px; color: var(--cyan); text-decoration: none; font-weight: 700;}
+        .back-btn:hover{text-decoration: underline;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tabela de Equipas (Base de Dados)</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Tag</th>
+                    <th>País</th>
+                    <th>Vitórias</th>
+                    <th>Derrotas</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for equipa in equipas %}
+                <tr>
+                    <td>{{ equipa.id }}</td>
+                    <td><strong>{{ equipa.nome }}</strong></td>
+                    <td>{{ equipa.tag }}</td>
+                    <td>{{ equipa.pais }}</td>
+                    <td>{{ equipa.vitorias }}</td>
+                    <td>{{ equipa.derrotas }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center; color: var(--muted);">Sem equipas registadas na base de dados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a class="back-btn" href="{% url 'pagina_inicial' %}">← Voltar à página inicial</a>
+    </div>
+</body>
+</html>
