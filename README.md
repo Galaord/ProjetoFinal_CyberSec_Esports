@@ -39,7 +39,7 @@ python manage.py startapp core
 Depois dentro da pasta "**core**" cria uma nova pasta chamada "**templates**" e dentro dessa nova pasta outra chamada "**core**".
 A Estrutura deve ser a seguinte **core > templates > core**
 
-Após isso copia todos os ficheiros disponíveis neste repositório para as suas correspondentes pastas, substituindo os ficheiros sempre que for pedido.
+Após isso copia todos os ficheiros disponíveis na pasta "**Projeto**" neste repositório para as suas correspondentes pastas, substituindo os ficheiros sempre que for pedido.
 
 ## Correr a aplicação
 
