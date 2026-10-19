@@ -1,12 +1,63 @@
-# ProjetoFinal_CyberSec_Esports
+# Manual de Instalação do Django e Uso da Aplicação
 
-Este projeto consiste no desenvolvimento e na proteção de uma plataforma de torneio de jogos concebida com foco em segurança desde a sua raiz. A proposta engloba a criação de um website seguro contra vulnerabilidades como A DECIDIR , com autenticação multifator (MFA) e criptografia HTTPS. Para suportar o sistema, será montada uma infraestrutura de rede segmentada através de VLANs e firewalls, mantendo a rede de produção e a rede de ataque isoladas. A atividade será monitorada em tempo real com um sistema SIEM e validada por simulações de ataque (Red Team) e análises forenses pós-incidente. O projeto demonstra a resiliência prática de uma infraestrutura integrada perante ameaças cibernéticas.
+## Base de Dados
 
-Objetivo 1: Projetar e configurar toda a infraestrutura de rede física com segmentação estrita via firewalls e VLANs, Restrição de DHCP, Reserva de MAC Addresses no WRT.
+Começar por importar a base de dados através do ficheiro *bd_torneios.sql* (Este ficheiro não tem uma query de create database, então precisam de criar a base de dados manualmente antes de executar ou adicionar *CREATE DATABASE bd_torneios;* antes do primeiro *CREATE TABLE*)
 
-Objetivo 2: Desenvolver a arquitetura base do website e da base de dados mitigando vulnerabilidades críticas web e protegendo perfis de utilizadores.
+## Instalação do Django
 
-Objetivo 3: Implementar monitorização ativa com uma ferramenta SIEM e estabelecer um plano documentado de resposta a incidentes (playbook).
+Primeiro verificar se tem o Python instalado no computador. No CMD escreva:
+```
+python --version
+```
+Se não tiver instalado é necessário instalar.
 
-Objetivo 4: Testar a segurança de forma adversária e conduzir recolhas de evidências forenses através da análise detalhada de logs e metadados.
-a
+Cria uma pasta para o projeto e navega até essa pasta no CMD (O vosso caminho e o nome da pasta pode ser diferente).
+```
+cd desktop/projeto
+```
+
+Ainda no CMD siga os seguintes passos:
+```
+python -m venv venv
+```
+```
+venv\Scripts\activate
+```
+```
+pip install django pymysql
+```
+```
+django-admin startproject nexus_arena .
+```
+```
+python manage.py startapp core
+```
+
+## Importar os Ficheiros da Aplicação
+
+Depois adiciona dentro da pasta **core** cria uma nova pasta chamada **templates** e dentro dessa nova pasta outra chamada **core**.
+A Estrutura deve ser a seguinte **core > templates > core**
+
+Após isso copia todos os ficheiros disponíveis neste repositório para as suas correspondentes pastas, substituindo os ficheiros sempre que for pedido.
+
+## Correr a aplicação
+
+Por fim, voltar ao CMD e executar o comando:
+```
+python manage.py runserver
+```
+
+Para desligar o servidor do Django basta pressionar as teclas **Ctrl** + **C** no CMD. Para o voltar a ligar é só repetir o comando anterior desde que não feche o CMD.
+
+Sempre que fecharem o CMD tem que executar os seguintes comandos:
+Primeiro navegar até à pasta do projeto (O vosso caminho e o nome da pasta pode ser diferente).
+```
+cd desktop/projeto
+```
+```
+venv\Scripts\activate
+```
+```
+python manage.py runserver
+```
