@@ -51,6 +51,7 @@ python manage.py runserver
 Para desligar o servidor do Django basta pressionar as teclas **Ctrl** + **C** no CMD. Para o voltar a ligar é só repetir o comando anterior desde que não feche o CMD.
 
 Sempre que fecharem o CMD tem que executar os seguintes comandos:
+
 Primeiro navegar até à pasta do projeto (O vosso caminho e o nome da pasta pode ser diferente).
 ```
 cd desktop/projeto
