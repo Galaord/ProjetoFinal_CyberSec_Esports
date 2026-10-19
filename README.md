@@ -36,7 +36,7 @@ python manage.py startapp core
 
 ## Importar os Ficheiros da Aplicação
 
-Depois adiciona dentro da pasta **core** cria uma nova pasta chamada **templates** e dentro dessa nova pasta outra chamada **core**.
+Depois dentro da pasta "**core**" cria uma nova pasta chamada "**templates**" e dentro dessa nova pasta outra chamada "**core**".
 A Estrutura deve ser a seguinte **core > templates > core**
 
 Após isso copia todos os ficheiros disponíveis neste repositório para as suas correspondentes pastas, substituindo os ficheiros sempre que for pedido.
