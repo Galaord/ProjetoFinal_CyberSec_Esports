@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#050811">
+	<title>{{ torneio.nome }} | NEXUS ARENA</title>
+	<style>
+		:root{
+			--bg:#050811;
+			--panel:#0f172a;
+			--panel2:#141f36;
+			--text:#ffffff;
+			--muted:#cbd5e1;
+			--red:#ff2a4b;
+			--blue:#0066ff;
+			--cyan:#00d2ff;
+			--line:rgba(255,255,255,.12);
+		}
+		*{box-sizing:border-box}
+		html{scroll-behavior:smooth}
+		body{
+			min-height:100vh;margin:0;color:var(--text);
+			background:
+				radial-gradient(circle at 78% 14%,rgba(0,102,255,.22),transparent 35%),
+				radial-gradient(circle at 10% 42%,rgba(255,42,75,.17),transparent 35%),
+				linear-gradient(180deg,#04060d 0%,#080d1a 48%,#050811 100%);
+			font-family:Inter,system-ui,sans-serif;
+		}
+		a{color:inherit;text-decoration:none}
+		.container{width:min(1180px,calc(100% - 40px));margin:auto}
+		.nav{height:78px;display:flex;align-items:center;justify-content:space-between}
+		.logo{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:900;letter-spacing:-1px}
+		.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--blue));transform:skew(-12deg);box-shadow:0 0 30px rgba(255,42,75,.4)}
+		.nav-links{display:flex;gap:28px;color:var(--muted);font-size:14px;font-weight:700}
+		.nav-links a:hover,.back-link:hover{color:var(--cyan)}
+		.nav-actions{display:flex;align-items:center;gap:10px}
+		.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 17px;border:1px solid var(--line);border-radius:10px;font-size:13px;font-weight:800;transition:transform .2s,border-color .2s}
+		.btn:hover{transform:translateY(-2px);border-color:var(--cyan)}
+		.btn-ghost{background:rgba(255,255,255,.05)}
+		.btn-primary{border:0;background:linear-gradient(100deg,var(--red),var(--blue));box-shadow:0 10px 35px rgba(0,102,255,.25)}
+		
+		main{padding:40px 0 80px}
+		.back-btn{display:inline-flex;align-items:center;gap:8px;color:var(--cyan);text-decoration:none;font-weight:800;font-size:13px;margin-bottom:24px;transition:transform .2s}
+		.back-btn:hover{transform:translateX(-3px)}
+		
+		.card{
+			background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(5,8,17,.96));
+			border:1px solid var(--line); border-radius: 22px; padding: 35px; margin-bottom: 40px;
+			box-shadow: 0 20px 50px rgba(0,0,0,.5);
+		}
+		.eyebrow{color:var(--red);font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+		h1{font-size: clamp(32px, 4vw, 48px); margin:0 0 10px; color: #fff; letter-spacing: -2px;}
+		.meta-info{color: var(--muted); font-size: 15px; margin-bottom: 30px;}
+		
+		.info-grid{display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;}
+		.info-box{background: rgba(5,8,17,.7); padding: 18px; border-radius: 12px; border: 1px solid var(--line);}
+		.info-box span{display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;}
+		.info-box strong{font-size: 18px; color: #fff;}
+
+		.section-title{font-size: 22px; margin: 40px 0 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 10px;}
+		
+		.matches-grid{display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px;}
+		.match-card{background: rgba(15,23,42,.8); border: 1px solid var(--line); border-radius: 14px; padding: 20px; transition: border-color .2s;}
+		.match-card:hover{border-color: rgba(0,210,255,.42);}
+		.match-header{display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; font-weight: 700;}
+		.match-teams{display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 800; margin-bottom: 15px;}
+		.team-score{background: rgba(255,255,255,.05); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line);}
+		.match-footer{border-top: 1px solid var(--line); padding-top: 10px; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between;}
+		
+		.empty-state{padding: 20px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); text-align: center; font-size: 14px;}
+
+		@media(max-width: 850px){
+			.nav-links{display:none}
+			.info-grid{grid-template-columns: repeat(2, 1fr);}
+		}
+		@media(max-width: 500px){
+			.info-grid{grid-template-columns: 1fr;}
+		}
+	</style>
+</head>
+<body>
+	<header class="container nav">
+		<a class="logo" href="{% url 'pagina_inicial' %}" aria-label="NEXUS ARENA, página inicial"><span class="logo-mark" aria-hidden="true"></span>NEXUS ARENA</a>
+		<nav class="nav-links" aria-label="Navegação principal">
+			<a href="{% url 'comunidade' %}">Equipas</a>
+			<a href="{% url 'torneios' %}">Torneios</a>
+			<a href="{% url 'pagina_inicial' %}#ranking">Rankings</a>
+			<a href="{% url 'comunidade' %}">Comunidade</a>
+		</nav>
+		<div class="nav-actions">
+			<a class="btn btn-ghost" href="{% url 'pagina_inicial' %}">Página inicial</a>
+			<a class="btn btn-primary" href="{% url 'login' %}">Entrar</a>
+		</div>
+	</header>
+
+	<main class="container">
+		<a class="back-btn" href="{% url 'torneios' %}">← Voltar à lista de torneios</a>
+		
+		<!-- Informações Gerais do Torneio -->
+		<div class="card">
+			<div class="eyebrow">Detalhes do Evento</div>
+			<h1>{{ torneio.nome }}</h1>
+			<p class="meta-info">Jogo: <strong>{{ torneio.jogo }}</strong> · Formato: <strong>{{ torneio.formato }}</strong></p>
+
+			<div class="info-grid">
+				<div class="info-box">
+					<span>Data de Início</span>
+					<strong>{{ torneio.data_inicio }}</strong>
+				</div>
+				<div class="info-box">
+					<span>Data de Fim</span>
+					<strong>{{ torneio.data_fim|default:"Por definir" }}</strong>
+				</div>
+				<div class="info-box">
+					<span>Formato Geral</span>
+					<strong>{{ torneio.formato }}</strong>
+				</div>
+				<div class="info-box">
+					<span>Estado Atual</span>
+					<strong style="color: var(--cyan);">{{ torneio.estado }}</strong>
+				</div>
+			</div>
+		</div>
+
+		<!-- Secção de Partidas Concluídas -->
+		<h2 class="section-title">🏆 Partidas Concluídas & Resultados</h2>
+		<div class="matches-grid">
+			{% for partida in partidas %}
+				{% if partida.estado == 'Concluida' %}
+				<div class="match-card">
+					<div class="match-header">
+						<span>{{ partida.fase }}</span>
+						<span style="color: var(--cyan);">{{ partida.formato }}</span>
+					</div>
+					<div class="match-teams">
+						<span>{{ partida.equipa1.nome }}</span>
+						<div class="team-score">{{ partida.mapas_equipa1 }} - {{ partida.mapas_equipa2 }}</div>
+						<span>{{ partida.equipa2.nome }}</span>
+					</div>
+					<div class="match-footer">
+						<span>Vencedor: <strong>{{ partida.vencedor.nome|default:"Empate" }}</strong></span>
+						<span>{{ partida.data_jogo|date:"d M Y, H:i" }}</span>
+					</div>
+				</div>
+				{% endif %}
+			{% empty %}
+			<p class="empty-state">Ainda não existem partidas concluídas registadas.</p>
+			{% endfor %}
+		</div>
+
+		<!-- Secção de Partidas Agendadas / Futuras -->
+		<h2 class="section-title" style="margin-top: 50px;">📅 Próximos Jogos (Agendados)</h2>
+		<div class="matches-grid">
+			{% for partida in partidas %}
+				{% if partida.estado == 'Agendada' or partida.estado == 'Em andamento' %}
+				<div class="match-card">
+					<div class="match-header">
+						<span>{{ partida.fase }}</span>
+						<span style="color: var(--red);">{{ partida.estado }}</span>
+					</div>
+					<div class="match-teams">
+						<span>{{ partida.equipa1.nome }}</span>
+						<span style="font-size: 13px; color: var(--muted);">vs</span>
+						<span>{{ partida.equipa2.nome }}</span>
+					</div>
+					<div class="match-footer">
+						<span>Formato: {{ partida.formato }}</span>
+						<span>{{ partida.data_jogo|date:"d M Y, H:i" }}</span>
+					</div>
+				</div>
+				{% endif %}
+			{% empty %}
+			<p class="empty-state">Não existem jogos agendados de momento.</p>
+			{% endfor %}
+		</div>
+	</main>
+
+	<footer class="container" style="padding:0 0 32px;color:var(--muted);font-size:12px">
+		<div style="border-top:1px solid rgba(255,255,255,.12);padding-top:20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
+			<span>© 2026 NEXUS ARENA</span>
+			<a href="{% url 'pagina_inicial' %}">Voltar à página inicial</a>
+		</div>
+	</footer>
+</body>
+</html>

@@ -90,7 +90,7 @@
 </head>
 <body>
 	<header class="container nav">
-		<a class="logo" href="PaginaInicial.html" aria-label="NEXUS ARENA, página inicial"><span class="logo-mark" aria-hidden="true"></span>NEXUS ARENA</a>
+		<a class="logo" href="{% url 'pagina_inicial' %}" aria-label="NEXUS ARENA, página inicial"><span class="logo-mark" aria-hidden="true"></span>NEXUS ARENA</a>
 	</header>
 	<main class="container">
 		<div class="register-layout">
@@ -137,7 +137,7 @@
 					</label>
 					<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
 					<button class="submit-button" type="submit">Criar conta</button>
-					<p class="login-prompt">Já tens conta? <a href="login.html">Entrar</a></p>
+					<p class="login-prompt">Já tens conta? <a href="{% url 'login' %}">Entrar</a></p>
 				</form>
 			</section>
 		</div>
