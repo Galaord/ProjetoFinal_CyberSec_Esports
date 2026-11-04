@@ -7,5 +7,6 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('registo/', views.registo_view, name='registo'),
     path('torneios/', views.torneios, name='torneios'),
+    path('torneios/<int:torneio_id>/', views.detalhe_torneio_view, name='detalhe_torneio'), # Nova rota de detalhes
     path('teste/', views.teste_view, name='teste'),
 ]
