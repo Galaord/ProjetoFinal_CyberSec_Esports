@@ -1,6 +1,7 @@
 To do list - Website
 
 Diogo: Alterar os jogos agendados e concluidos em torneios para só aparecer se existirem jogos agendados ou concluidos.
+Alterar base de dados: Rifler para Lurker em jogador_equipa
 
 Joana: 
 
