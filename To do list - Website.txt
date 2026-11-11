@@ -5,7 +5,6 @@ Alterar base de dados: Rifler para Lurker em jogador_equipa; Remover pontos em i
 
 Joana: 
 
-Lucas: Dar fix á secção de CSS do site
-Nota: Acreditamos já ter todas as paginas terminadas, mas partilho da opinião que devíamos simplificar a aparencia do mesmo. Entretanto a página comunidade precisa mesmo muito de ser revista, foi a única que não fiz sozinho e tou com bastantes dúvidas em relação ao que tenho.
+Lucas:
 
 Vasco: 
