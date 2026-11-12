@@ -31,8 +31,6 @@
 		.nav{height:78px;display:flex;align-items:center;justify-content:space-between}
 		.logo{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:900;letter-spacing:-1px}
 		.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--blue));transform:skew(-12deg);box-shadow:0 0 30px rgba(255,42,75,.4)}
-		.back-link{color:var(--muted);font-size:14px;font-weight:700;transition:color .2s}
-		.back-link:hover{color:var(--cyan)}
 		main{min-height:calc(100vh - 78px);display:grid;place-items:center;padding:36px 0 64px}
 		.register-layout{width:min(980px,100%);display:grid;grid-template-columns:.9fr 1.1fr;align-items:center;gap:64px}
 		.intro{padding:20px 0}
@@ -44,7 +42,6 @@
 		.benefit{display:flex;align-items:center;gap:11px}
 		.benefit-mark{display:grid;place-items:center;width:25px;height:25px;border:1px solid rgba(0,210,255,.35);border-radius:8px;color:var(--cyan);background:rgba(0,210,255,.08)}
 		.form-panel{position:relative;overflow:hidden;padding:34px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(145deg,rgba(15,23,42,.97),rgba(5,8,17,.98));box-shadow:0 35px 100px rgba(0,0,0,.55),0 0 65px rgba(0,102,255,.12)}
-		.form-panel:before{content:"";position:absolute;top:-100px;right:-100px;width:220px;height:220px;border-radius:50%;background:var(--blue);filter:blur(110px);opacity:.22;pointer-events:none}
 		.form-heading{position:relative;margin-bottom:25px}
 		.form-heading h2{margin:0 0 8px;font-size:25px;letter-spacing:-.7px}
 		.form-heading p{margin:0;color:var(--muted);font-size:13px}
@@ -60,32 +57,12 @@
 		.terms a{color:var(--cyan);text-decoration:underline;text-underline-offset:3px}
 		.submit-button{min-height:48px;border:0;border-radius:10px;color:#fff;font-weight:900;cursor:pointer;background:linear-gradient(100deg,var(--red),var(--blue));box-shadow:0 10px 35px rgba(0,102,255,.25);transition:transform .2s,filter .2s}
 		.submit-button:hover{transform:translateY(-2px);filter:brightness(1.08)}
-		.submit-button:focus-visible,.back-link:focus-visible,.logo:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
-		.form-status{display:none;margin:0;padding:11px 12px;border:1px solid rgba(255,42,75,.35);border-radius:8px;background:rgba(255,42,75,.08);color:#ffd5dc;font-size:12px;line-height:1.5}
-		.form-status.is-visible{display:block}
+		.form-status{margin:0;padding:11px 12px;border:1px solid rgba(255,42,75,.35);border-radius:8px;background:rgba(255,42,75,.08);color:#ffd5dc;font-size:12px;line-height:1.5}
 		.login-prompt{margin:4px 0 0;text-align:center;color:var(--muted);font-size:12px}
 		.login-prompt a{color:#fff;font-weight:800;text-decoration:underline;text-underline-offset:3px}
 		@media(max-width:760px){
 			.register-layout{max-width:510px;grid-template-columns:1fr;gap:24px}
-			.intro{padding:8px 0 0}
-			.intro p{max-width:480px}
-			.benefits{grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
-			.benefit{font-size:11px}
-			main{place-items:start center;padding-top:26px}
 		}
-		@media(max-width:480px){
-			.container{width:calc(100% - 28px)}
-			.nav{height:68px}
-			.logo{font-size:18px}
-			.logo-mark{width:30px;height:30px}
-			.back-link{font-size:12px}
-			main{min-height:calc(100vh - 68px);padding:18px 0 40px}
-			h1{font-size:42px;letter-spacing:-2px}
-			.intro p{font-size:14px}
-			.benefits{display:none}
-			.form-panel{padding:24px 20px;border-radius:16px}
-		}
-		@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
 	</style>
 </head>
 <body>
@@ -109,14 +86,21 @@
 					<h2 id="form-title">Registar jogador</h2>
 					<p>Preenche os teus dados para criar o perfil.</p>
 				</div>
-				<form id="registration-form">
+				<!-- Formulário configurado com POST e CSRF token -->
+				<form method="POST" action="{% url 'registo' %}" id="registration-form">
+					{% csrf_token %}
+					
+					{% if error %}
+						<p class="form-status">{{ error }}</p>
+					{% endif %}
+
 					<div class="field">
 						<label for="full-name">Nome</label>
 						<input id="full-name" name="name" type="text" autocomplete="name" placeholder="O teu nome" required minlength="2">
 					</div>
 					<div class="field">
 						<label for="username">Nome de jogador</label>
-						<input id="username" name="username" type="text" autocomplete="nickname" placeholder="Como apareces na arena" required minlength="3" maxlength="24" pattern="[A-Za-z0-9_\-]+" title="Usa 3 a 24 letras, números, traços ou underscores.">
+						<input id="username" name="username" type="text" autocomplete="nickname" placeholder="Como apareces na arena" required minlength="3" maxlength="24">
 						<p class="field-hint">3 a 24 caracteres: letras, números, _ ou -</p>
 					</div>
 					<div class="field">
@@ -133,9 +117,8 @@
 					</div>
 					<label class="terms" for="terms">
 						<input id="terms" name="terms" type="checkbox" required>
-						<span>Li e aceito os <a href="#termos">termos de serviço</a> e a <a href="#privacidade">política de privacidade</a>.</span>
+						<span>Li e aceito os termos de serviço e a política de privacidade.</span>
 					</label>
-					<p class="form-status" id="form-status" role="status" aria-live="polite"></p>
 					<button class="submit-button" type="submit">Criar conta</button>
 					<p class="login-prompt">Já tens conta? <a href="{% url 'login' %}">Entrar</a></p>
 				</form>
@@ -146,7 +129,6 @@
 		const registrationForm = document.querySelector("#registration-form");
 		const passwordInput = document.querySelector("#password");
 		const confirmPasswordInput = document.querySelector("#confirm-password");
-		const formStatus = document.querySelector("#form-status");
 
 		function validatePasswordMatch() {
 			const matches = passwordInput.value === confirmPasswordInput.value;
@@ -156,17 +138,11 @@
 
 		passwordInput.addEventListener("input", validatePasswordMatch);
 		confirmPasswordInput.addEventListener("input", validatePasswordMatch);
+		
 		registrationForm.addEventListener("submit", (event) => {
-			event.preventDefault();
-			formStatus.classList.remove("is-visible");
-
-			if (!registrationForm.reportValidity() || !validatePasswordMatch()) {
-				registrationForm.reportValidity();
-				return;
+			if (!validatePasswordMatch()) {
+				event.preventDefault();
 			}
-
-			formStatus.textContent = "Os dados estão válidos, mas a criação de contas ainda precisa de um serviço de registo ligado à aplicação.";
-			formStatus.classList.add("is-visible");
 		});
 	</script>
 </body>
