@@ -353,12 +353,12 @@
 <body>
 
 <header class="container nav">
-	<a class="logo" href="PaginaInicial.html"><span class="logo-mark"></span>NEXUS ARENA</a>
+	<a class="logo" href="{% url 'pagina_inicial' %}"><span class="logo-mark"></span>NEXUS ARENA</a>
 	<nav class="nav-links" id="primary-navigation" aria-label="Navegação principal">
 		<a href="PaginaInicial.html#jogos">Jogos</a>
-		<a href="PaginaInicial.html#torneios">Torneios</a>
+		<a href="{% url 'torneios' %}">Torneios</a>
 		<a href="PaginaInicial.html#ranking">Rankings</a>
-		<a href="Comunidade.html" class="active" aria-current="page">Comunidade</a>
+		<a href="{% url 'comunidade' %}" class="active" aria-current="page">Comunidade</a>
 	</nav>
 	<div class="nav-actions">
 		<a class="btn btn-ghost" href="PaginaInicial.html#torneios">Explorar</a>
