@@ -1,0 +1,25 @@
+ts_iso,ts_epoch,level,event,socket_id,detail
+2026-11-12T14:13:10.498+00:00,1794492790.498,INFO,csv_log_opened,,path=slowloris_20261112_141310.csv
+2026-11-12T14:13:10.498+00:00,1794492790.499,INFO,start,,target=katalicious.com port=80 sockets=150 delay_s=15 tls=False proxy=False
+2026-11-12T14:13:10.498+00:00,1794492790.499,INFO,root,,Attacking katalicious.com with 150 sockets.
+2026-11-12T14:13:10.498+00:00,1794492790.499,INFO,root,,Creating Sockets...
+2026-11-12T14:13:10.498+00:00,1794492790.499,DEBUG,root,,Creating Socket #0
+2026-11-12T14:13:10.498+00:00,1794492790.499,DEBUG,connect_start,s0000,target=katalicious.com:80
+2026-11-12T14:13:10.542+00:00,1794492790.543,DEBUG,connect_error,s0000,error=gaierror elapsed_ms=44.0
+2026-11-12T14:13:10.542+00:00,1794492790.543,DEBUG,root,,[Errno -2] Name or service not known
+2026-11-12T14:13:10.542+00:00,1794492790.543,INFO,sockets_ready,,count=0
+2026-11-12T14:13:10.542+00:00,1794492790.543,INFO,root,,Sending Headers...
+2026-11-12T14:13:10.542+00:00,1794492790.543,INFO,root,,Socket count: 0
+2026-11-12T14:13:10.542+00:00,1794492790.543,INFO,root,,Creating 150 new sockets...
+2026-11-12T14:13:10.542+00:00,1794492790.543,DEBUG,connect_start,r0000,target=katalicious.com:80
+2026-11-12T14:13:10.544+00:00,1794492790.545,DEBUG,connect_error,r0000,error=gaierror elapsed_ms=2.0
+2026-11-12T14:13:10.544+00:00,1794492790.545,DEBUG,root,,Failed to create new socket: [Errno -2] Name or service not known
+2026-11-12T14:13:10.544+00:00,1794492790.545,DEBUG,root,,Sleeping for 15 seconds
+2026-11-12T14:13:25.545+00:00,1794492805.545,INFO,root,,Sending Headers...
+2026-11-12T14:13:25.545+00:00,1794492805.545,INFO,root,,Socket count: 0
+2026-11-12T14:13:25.545+00:00,1794492805.545,INFO,root,,Creating 150 new sockets...
+2026-11-12T14:13:25.545+00:00,1794492805.545,DEBUG,connect_start,r0000,target=katalicious.com:80
+2026-11-12T14:13:25.546+00:00,1794492805.547,DEBUG,connect_error,r0000,error=gaierror elapsed_ms=1.6
+2026-11-12T14:13:25.546+00:00,1794492805.547,DEBUG,root,,Failed to create new socket: [Errno -2] Name or service not known
+2026-11-12T14:13:25.547+00:00,1794492805.547,DEBUG,root,,Sleeping for 15 seconds
+2026-11-12T14:13:29.158+00:00,1794492809.158,INFO,stop,,sockets_alive=0 uptime_s=18.7

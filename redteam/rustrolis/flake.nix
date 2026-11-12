@@ -19,7 +19,7 @@
         };
       in {
         devShells.default = pkgs.mkShell {
-          packages = [ toolchain pkgs.pkg-config pkgs.openssl ];
+          packages = [ toolchain pkgs.pkg-config pkgs.openssl pkgs.rust-script ];
           RUST_SRC_PATH = "${toolchain}/lib/rustlib/src/rust/library";
         };
       });
