@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 19-Out-2026 às 06:02
--- Versão do servidor: 10.4.32-MariaDB-log
--- versão do PHP: 8.2.12
+-- Tempo de geração: 13-Nov-2026 às 18:30
+-- Versão do servidor: 10.11.16-MariaDB
+-- versão do PHP: 8.5.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `bd_torneios`
+-- Base de dados: `bd_torneios`
 --
 
 -- --------------------------------------------------------
@@ -34,7 +34,7 @@ CREATE TABLE `equipas` (
   `pais` varchar(60) DEFAULT NULL,
   `vitorias` int(11) NOT NULL DEFAULT 0,
   `derrotas` int(11) NOT NULL DEFAULT 0
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Extraindo dados da tabela `equipas`
@@ -61,7 +61,7 @@ CREATE TABLE `estatisticas_jogador` (
   `assists` int(11) NOT NULL DEFAULT 0,
   `mvps` int(11) NOT NULL DEFAULT 0,
   `dano_total` int(11) NOT NULL DEFAULT 0
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Extraindo dados da tabela `estatisticas_jogador`
@@ -100,7 +100,7 @@ CREATE TABLE `inscricoes_torneio` (
   `data_inscricao` date NOT NULL,
   `posicao_final` int(11) DEFAULT NULL,
   `pontos` int(11) NOT NULL DEFAULT 0
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Extraindo dados da tabela `inscricoes_torneio`
@@ -225,7 +225,7 @@ CREATE TABLE `partidas_torneio` (
   `estado` enum('Agendada','Em andamento','Concluida','Cancelada') NOT NULL DEFAULT 'Agendada',
   `mapas_equipa1` int(11) NOT NULL DEFAULT 0,
   `mapas_equipa2` int(11) NOT NULL DEFAULT 0
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Extraindo dados da tabela `partidas_torneio`
@@ -254,7 +254,7 @@ CREATE TABLE `partida_mapa` (
   `vencedor_id` int(11) DEFAULT NULL,
   `lado_inicial_equipa1` enum('CT','T') DEFAULT NULL,
   `overtime` tinyint(1) NOT NULL DEFAULT 0
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Extraindo dados da tabela `partida_mapa`
@@ -282,7 +282,7 @@ CREATE TABLE `torneios` (
   `data_fim` date DEFAULT NULL,
   `formato` varchar(10) NOT NULL DEFAULT 'BO3',
   `estado` enum('Planeado','Em andamento','Concluido','Cancelado') NOT NULL DEFAULT 'Planeado'
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Extraindo dados da tabela `torneios`
@@ -292,6 +292,28 @@ INSERT INTO `torneios` (`id`, `nome`, `jogo`, `data_inicio`, `data_fim`, `format
 (1, 'CS2 Portugal Cup 2026', 'CS2', '2026-10-01', '2026-10-15', 'BO3', 'Em andamento'),
 (2, 'Lisbon Esports Masters', 'CS2', '2026-11-01', '2026-11-10', 'BO3', 'Planeado'),
 (3, 'CS:GO Legends Cup', 'CS:GO', '2026-09-01', '2026-09-20', 'BO1', 'Concluido');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `utilizadores`
+--
+
+CREATE TABLE `utilizadores` (
+  `id` int(11) NOT NULL,
+  `nome` varchar(100) NOT NULL,
+  `nickname` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `data_registo` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Extraindo dados da tabela `utilizadores`
+--
+
+INSERT INTO `utilizadores` (`id`, `nome`, `nickname`, `email`, `password`, `data_registo`) VALUES
+(1, 'diogo', 'diogo2', 'diogo@email.com', 'pbkdf2_sha256$1500000$ayFxrZcXc7LgUMVHrQ5wxw$r1QGuxwekHPcZyIVQnxsLvMmZvolJ7UzcvSOEfWOzlw=', '2026-11-13 16:14:24');
 
 --
 -- Índices para tabelas despejadas
@@ -370,6 +392,14 @@ ALTER TABLE `torneios`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Índices para tabela `utilizadores`
+--
+ALTER TABLE `utilizadores`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nickname` (`nickname`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
 -- AUTO_INCREMENT de tabelas despejadas
 --
 
@@ -377,19 +407,19 @@ ALTER TABLE `torneios`
 -- AUTO_INCREMENT de tabela `equipas`
 --
 ALTER TABLE `equipas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `estatisticas_jogador`
 --
 ALTER TABLE `estatisticas_jogador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT de tabela `inscricoes_torneio`
 --
 ALTER TABLE `inscricoes_torneio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de tabela `jogadores`
@@ -413,19 +443,25 @@ ALTER TABLE `mapas`
 -- AUTO_INCREMENT de tabela `partidas_torneio`
 --
 ALTER TABLE `partidas_torneio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `partida_mapa`
 --
 ALTER TABLE `partida_mapa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `torneios`
 --
 ALTER TABLE `torneios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de tabela `utilizadores`
+--
+ALTER TABLE `utilizadores`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restrições para despejos de tabelas
