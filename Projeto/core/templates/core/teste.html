@@ -14,6 +14,20 @@
             font-family:Inter,system-ui,sans-serif; padding: 40px;
         }
         .container{width:min(900px, 100%); margin:auto;}
+        
+        /* Estilo para a caixa de estado da sessão */
+        .session-box{
+            background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+            padding: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .session-info span{color: var(--cyan); font-weight: 800;}
+        .session-actions a{
+            padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 800; text-decoration: none; margin-left: 10px;
+        }
+        .btn-login{background: rgba(255,255,255,.08); color: #fff; border: 1px solid var(--line);}
+        .btn-logout{background: rgba(255,42,75,.15); color: var(--red); border: 1px solid rgba(255,42,75,.3);}
+        .btn-logout:hover{background: rgba(255,42,75,.3);}
+
         h1{font-size: 28px; margin-bottom: 20px;}
         table{width:100%; border-collapse: collapse; background:var(--panel); border:1px solid var(--line); border-radius: 12px; overflow: hidden;}
         th, td{padding: 14px 18px; text-align: left; border-bottom: 1px solid var(--line);}
@@ -26,6 +40,26 @@
 </head>
 <body>
     <div class="container">
+        
+        <!-- Bloco para verificar o estado da sessão -->
+        <div class="session-box">
+            <div class="session-info">
+                {% if request.session.utilizador_nickname %}
+                    Estado da Sessão: <strong>Online</strong> (Utilizador: <span>{{ request.session.utilizador_nickname }}</span>)
+                {% else %}
+                    Estado da Sessão: <strong style="color: var(--red);">Desconectado</strong> (A navegar como Visitante)
+                {% endif %}
+            </div>
+            <div class="session-actions">
+                {% if request.session.utilizador_nickname %}
+                    <a href="{% url 'logout' %}" class="btn-logout">Terminar Sessão</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-login">Entrar</a>
+                    <a href="{% url 'registo' %}" class="btn-login" style="background:linear-gradient(100deg,var(--red),var(--blue)); border:0; color:#fff;">Criar Conta</a>
+                {% endif %}
+            </div>
+        </div>
+
         <h1>Tabela de Equipas (Base de Dados)</h1>
         <table>
             <thead>
