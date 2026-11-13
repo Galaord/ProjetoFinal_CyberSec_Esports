@@ -4,7 +4,30 @@ from django.db import connection
 from .models import Equipa, Utilizador, Torneio, PartidaTorneio 
 
 def pagina_inicial(request):
-    return render(request, 'core/PaginaInicial.html')
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT j.nickname, 
+                   (COALESCE(e.kills, 0) + COALESCE(e.assists, 0)) / GREATEST(COALESCE(e.deaths, 1), 1) AS kda
+            FROM estatisticas_jogador e
+            JOIN jogadores j ON e.jogador_id = j.id
+            ORDER BY kda DESC 
+            LIMIT 5
+        """)
+        top_jogadores = cursor.fetchall()
+
+    top_equipas = Equipa.objects.all().extra(
+        select={'winrate': 'vitorias / (vitorias + derrotas + 0.01) * 100'}
+    ).order_by('-vitorias')[:5]
+
+    torneios_recentes = Torneio.objects.all().order_by('-data_inicio')[:3]
+
+    context = {
+        'top_jogadores': top_jogadores,
+        'top_equipas': top_equipas,
+        'torneios_recentes': torneios_recentes,
+    }
+    
+    return render(request, 'core/PaginaInicial.html', context)
 
 def comunidade(request):
     return render(request, 'core/Comunidade.html')
@@ -20,7 +43,9 @@ def login_view(request):
             row = cursor.fetchone()
             
             if row and check_password(password, row[2]):
-                # Login efetuado com sucesso (redireciona diretamente)
+                # Guarda o ID na sessão de forma segura e encriptada pelo Django
+                request.session['utilizador_id'] = row[0]
+                request.session['utilizador_nickname'] = row[1]
                 return redirect('pagina_inicial')
             else:
                 erro = "E-mail ou palavra-passe incorretos."
@@ -57,6 +82,7 @@ def registo_view(request):
     return render(request, 'core/registo.html', {'error': erro})
 
 def logout_view(request):
+    request.session.flush()
     return redirect('pagina_inicial')
 
 def torneios(request):
