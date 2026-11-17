@@ -1,0 +1,6 @@
+timestamp,agent.name,rule.description,rule.level,rule.id,data.srcip,rule.mitre.id
+"Nov 3, 2026 @ 11:34:16.265",Ubuntu,sshd: brute force trying to get access to the system. Authentication failed.,10,5763,192.168.20.2,"[""T1110""]"
+"Nov 3, 2026 @ 11:34:06.185",Ubuntu,syslog: User missed the password more than one time,10,2502,192.168.20.2,"[""T1110""]"
+"Nov 3, 2026 @ 11:33:50.124",Ubuntu,syslog: User missed the password more than one time,10,2502,192.168.20.2,"[""T1110""]"
+"Nov 1, 2026 @ 16:38:34.514",Ubuntu,syslog: User missed the password more than one time,10,2502,,"[""T1110""]"
+"Oct 29, 2026 @ 19:18:09.365",Ubuntu,Grupo 4 - Evento de segurança recebido por Syslog,8,100140,,
