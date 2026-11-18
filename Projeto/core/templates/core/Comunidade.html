@@ -1,4 +1,5 @@
-<html>
+<!doctype html>
+<html lang="pt">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -156,7 +157,6 @@
 			flex-direction:column;
 			gap:16px;
 			transition:.25s;
-			cursor:pointer;
 			position:relative;
 			overflow:hidden;
 		}
@@ -215,23 +215,6 @@
 			color:var(--muted);
 			text-transform:uppercase;
 		}
-		.team-roster{
-			display:flex;
-			gap:6px;
-			align-items:center;
-		}
-		.roster-avatar{
-			width:28px;
-			height:28px;
-			border-radius:50%;
-			background:var(--panel2);
-			border:1px solid var(--line);
-			display:grid;
-			place-items:center;
-			font-size:10px;
-			font-weight:800;
-			color:#fff;
-		}
 
 		.players-table-wrap{
 			border:1px solid var(--line);
@@ -284,54 +267,6 @@
 			border:1px solid rgba(0,210,255,.2);
 		}
 
-		.modal-overlay{
-			position:fixed;
-			inset:0;
-			background:rgba(4,6,13,.85);
-			backdrop-filter:blur(8px);
-			display:none;
-			place-items:center;
-			z-index:100;
-			padding:20px;
-		}
-		.modal-overlay.active{display:grid}
-		.modal-card{
-			background:linear-gradient(145deg,#0f172a,#050811);
-			border:1px solid var(--line);
-			border-radius:22px;
-			width:min(550px,100%);
-			padding:30px;
-			position:relative;
-			box-shadow:0 25px 50px rgba(0,0,0,.5);
-		}
-		.modal-close{
-			position:absolute;
-			top:20px;
-			right:20px;
-			background:transparent;
-			border:0;
-			color:var(--muted);
-			font-size:20px;
-			cursor:pointer;
-		}
-		.modal-close:hover{color:#fff}
-		.modal-title{margin:0 0 6px;font-size:24px;color:#fff}
-		.modal-subtitle{margin:0 0 20px;color:var(--muted);font-size:13px}
-		.roster-list{
-			display:grid;
-			gap:10px;
-			margin-top:15px;
-		}
-		.roster-item{
-			display:flex;
-			justify-content:space-between;
-			align-items:center;
-			padding:10px 14px;
-			background:rgba(5,8,17,.6);
-			border-radius:10px;
-			border:1px solid var(--line);
-		}
-
 		footer{padding:35px 0 50px;color:var(--muted);font-size:12px;margin-top:auto}
 		.footer-inner{display:flex;justify-content:space-between;gap:20px;border-top:1px solid var(--line);padding-top:25px}
 		.footer-links{display:flex;gap:20px}
@@ -355,13 +290,12 @@
 <header class="container nav">
 	<a class="logo" href="{% url 'pagina_inicial' %}"><span class="logo-mark"></span>NEXUS ARENA</a>
 	<nav class="nav-links" id="primary-navigation" aria-label="Navegação principal">
-		<a href="PaginaInicial.html#jogos">Jogos</a>
+		<a href="{% url 'jogos' %}">Jogos</a>
 		<a href="{% url 'torneios' %}">Torneios</a>
-		<a href="PaginaInicial.html#ranking">Rankings</a>
 		<a href="{% url 'comunidade' %}" class="active" aria-current="page">Comunidade</a>
 	</nav>
 	<div class="nav-actions">
-		<a class="btn btn-ghost" href="PaginaInicial.html#torneios">Explorar</a>
+		<a class="btn btn-ghost" href="{% url 'torneios' %}">Explorar</a>
 		<a class="btn btn-primary" href="{% url 'login' %}">Entrar</a>
 	</div>
 	<button class="mobile-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-navigation">☰</button>
@@ -383,18 +317,44 @@
 		<div class="search-filter">
 			<input type="text" class="search-input" id="search-input" placeholder="Pesquisar equipa ou jogador...">
 			<select class="filter-select" id="region-filter">
-				<option value="ALL">Todas as Regiões</option>
-				<option value="EU">EU</option>
-				<option value="PT/ES">PT / ES</option>
-				<option value="NA">NA</option>
+				<option value="ALL">Todas as Regiões / Países</option>
+				<option value="Portugal">Portugal</option>
+				<option value="Brasil">Brasil</option>
+				<option value="Alemanha">Alemanha</option>
 			</select>
 		</div>
 	</div>
 
+	<!-- Secção de Equipas (Base de Dados) -->
 	<section class="view-section active" id="section-teams">
-		<div class="grid-teams" id="teams-container"></div>
+		<div class="grid-teams" id="teams-container">
+			{% for equipa in equipas %}
+			<div class="team-card" data-name="{{ equipa.nome|lower }}" data-region="{{ equipa.pais }}">
+				<div class="team-header">
+					<div class="team-icon">🛡️</div>
+					<div class="team-info">
+						<h3>{{ equipa.nome }} ({{ equipa.tag }})</h3>
+						<p>País: {{ equipa.pais|default:"N/D" }}</p>
+					</div>
+				</div>
+				<div class="team-stats">
+					<div class="team-stat">
+						<span class="team-stat-val">{{ equipa.vitorias }}</span>
+						<span class="team-stat-lbl">Vitórias</span>
+					</div>
+					<div class="team-stat">
+						<span class="team-stat-val">{{ equipa.derrotas }}</span>
+						<span class="team-stat-lbl">Derrotas</span>
+					</div>
+				</div>
+			</div>
+			{% empty %}
+			<p style="color: var(--muted); grid-column: 1/-1;">Sem equipas registadas na base de dados.</p>
+			{% endfor %}
+		</div>
 	</section>
 
+	<!-- Secção de Jogadores (Base de Dados) -->
 	<section class="view-section" id="section-players">
 		<div class="players-table-wrap">
 			<table class="players-table">
@@ -403,37 +363,34 @@
 						<th>Jogador</th>
 						<th>Equipa</th>
 						<th>Função</th>
-						<th>Região</th>
-						<th>K/D Ratio</th>
+						<th>País</th>
+						<th>KDA</th>
 					</tr>
 				</thead>
-				<tbody id="players-container"></tbody>
+				<tbody id="players-container">
+					{% for jogador in jogadores %}
+					<tr class="player-row" data-name="{{ jogador.1|lower }}" data-team="{{ jogador.3|default:''|lower }}" data-region="{{ jogador.2 }}">
+						<td>
+							<div class="player-cell">
+								<div class="player-avatar">{{ jogador.1|slice:":2"|upper }}</div>
+								<span>{{ jogador.1 }}</span>
+							</div>
+						</td>
+						<td>{{ jogador.3|default:"Sem Equipa" }}</td>
+						<td><span class="badge-role">{{ jogador.4|default:"Rifler" }}</span></td>
+						<td>{{ jogador.2|default:"N/D" }}</td>
+						<td><strong>{{ jogador.5|default:0|floatformat:2 }}</strong></td>
+					</tr>
+					{% empty %}
+					<tr>
+						<td colspan="5" style="text-align: center; color: var(--muted);">Sem jogadores registados na base de dados.</td>
+					</tr>
+					{% endfor %}
+				</tbody>
 			</table>
 		</div>
 	</section>
 </main>
-
-<div class="modal-overlay" id="team-modal">
-	<div class="modal-card">
-		<button class="modal-close" id="modal-close">✕</button>
-		<h2 class="modal-title" id="modal-team-name">Nome da Equipa</h2>
-		<p class="modal-subtitle" id="modal-team-region">Região</p>
-		
-		<div class="team-stats" style="margin-bottom: 20px;">
-			<div class="team-stat">
-				<span class="team-stat-val" id="modal-team-tournaments">0</span>
-				<span class="team-stat-lbl">Torneios</span>
-			</div>
-			<div class="team-stat">
-				<span class="team-stat-val" id="modal-team-winrate">0%</span>
-				<span class="team-stat-lbl">Win Rate</span>
-			</div>
-		</div>
-
-		<h4 style="margin: 0 0 10px; color: #fff;">Lineup / Jogadores</h4>
-		<div class="roster-list" id="modal-roster-list"></div>
-	</div>
-</div>
 
 <footer>
 	<div class="container footer-inner">
@@ -446,43 +403,13 @@
 </footer>
 
 <script>
-	const teamsData = [
-		{ id: 1, name: "Team Falcon", icon: "◈", region: "EU", tournaments: 128, winrate: "68%", players: ["S1mple_CS", "Niko_R", "ZywOo_K", "Device_A", "B1t_G"] },
-		{ id: 2, name: "Bad Piggies", icon: "✦", region: "PT/ES", tournaments: 85, winrate: "59%", players: ["FOX_PT", "MUTiRiS", "rmn_1", "STABN", "JUST_1"] },
-		{ id: 3, name: "Cynical Legends", icon: "△", region: "EU", tournaments: 62, winrate: "54%", players: ["Hunter_99", "M0nesy_X", "Rain_P", "Karrigan_C", "Ropz_S"] },
-		{ id: 4, name: "Digital Lakers", icon: "◆", region: "NA", tournaments: 40, winrate: "48%", players: ["EliGE_1", "Twistzz_A", "NAF_K", "Grim_R", "JT_S"] },
-		{ id: 5, name: "Viper Esports", icon: "🐍", region: "PT/ES", tournaments: 31, winrate: "51%", players: ["Shadow_1", "Vortex_X", "Blade_R", "Kratos_9", "Apex_M"] },
-		{ id: 6, name: "Alpha Squad", icon: "⚡", region: "NA", tournaments: 19, winrate: "42%", players: ["Bolt_T", "Flash_G", "Storm_Z", "Rage_B", "Doom_K"] }
-	];
-
-	const playersData = [
-		{ name: "S1mple_CS", team: "Team Falcon", role: "AWPer", region: "EU", kd: "1.34" },
-		{ name: "FOX_PT", team: "Bad Piggies", role: "AWPer", region: "PT/ES", kd: "1.18" },
-		{ name: "ZywOo_K", team: "Team Falcon", role: "Rifler", region: "EU", kd: "1.30" },
-		{ name: "MUTiRiS", team: "Bad Piggies", role: "In-Game Leader", region: "PT/ES", kd: "1.05" },
-		{ name: "M0nesy_X", team: "Cynical Legends", role: "AWPer", region: "EU", kd: "1.28" },
-		{ name: "Twistzz_A", team: "Digital Lakers", role: "Rifler", region: "NA", kd: "1.15" },
-		{ name: "Shadow_1", team: "Viper Esports", role: "Entry Fragger", region: "PT/ES", kd: "1.08" },
-		{ name: "Bolt_T", team: "Alpha Squad", role: "Support", region: "NA", kd: "0.98" }
-	];
-
-	const teamsContainer = document.getElementById("teams-container");
-	const playersContainer = document.getElementById("players-container");
-	const searchInput = document.getElementById("search-input");
-	const regionFilter = document.getElementById("region-filter");
-	
 	const btnTabTeams = document.getElementById("btn-tab-teams");
 	const btnTabPlayers = document.getElementById("btn-tab-players");
 	const sectionTeams = document.getElementById("section-teams");
 	const sectionPlayers = document.getElementById("section-players");
 
-	const modal = document.getElementById("team-modal");
-	const modalClose = document.getElementById("modal-close");
-	const modalTeamName = document.getElementById("modal-team-name");
-	const modalTeamRegion = document.getElementById("modal-team-region");
-	const modalTeamTournaments = document.getElementById("modal-team-tournaments");
-	const modalTeamWinrate = document.getElementById("modal-team-winrate");
-	const modalRosterList = document.getElementById("modal-roster-list");
+	const searchInput = document.getElementById("search-input");
+	const regionFilter = document.getElementById("region-filter");
 	const mobileMenu = document.querySelector(".mobile-menu");
 	const primaryNavigation = document.getElementById("primary-navigation");
 
@@ -501,6 +428,7 @@
 		}
 	});
 
+	// Alternar abas Equipas / Jogadores (exclusivo, nunca aparecem os dois ao mesmo tempo)
 	btnTabTeams.addEventListener("click", () => {
 		btnTabTeams.classList.add("active");
 		btnTabPlayers.classList.remove("active");
@@ -515,105 +443,33 @@
 		sectionTeams.classList.remove("active");
 	});
 
-	function renderTeams() {
+	// Filtragem dinâmica de pesquisa e região
+	function filterContent() {
 		const query = searchInput.value.toLowerCase();
 		const region = regionFilter.value;
 
-		const filtered = teamsData.filter(team => {
-			const matchesSearch = team.name.toLowerCase().includes(query);
-			const matchesRegion = region === "ALL" || team.region === region;
-			return matchesSearch && matchesRegion;
+		const teamCards = document.querySelectorAll(".team-card");
+		teamCards.forEach(card => {
+			const name = card.getAttribute("data-name");
+			const cardRegion = card.getAttribute("data-region");
+			const matchesSearch = name.includes(query);
+			const matchesRegion = (region === "ALL" || cardRegion === region);
+			card.style.display = (matchesSearch && matchesRegion) ? "flex" : "none";
 		});
 
-		teamsContainer.innerHTML = filtered.map(team => `
-			<div class="team-card" onclick="openTeamModal(${team.id})">
-				<div class="team-header">
-					<div class="team-icon">${team.icon}</div>
-					<div class="team-info">
-						<h3>${team.name}</h3>
-						<p>Região: ${team.region}</p>
-					</div>
-				</div>
-				<div class="team-stats">
-					<div class="team-stat">
-						<span class="team-stat-val">${team.tournaments}</span>
-						<span class="team-stat-lbl">Torneios</span>
-					</div>
-					<div class="team-stat">
-						<span class="team-stat-val">${team.winrate}</span>
-						<span class="team-stat-lbl">Win Rate</span>
-					</div>
-				</div>
-				<div class="team-roster">
-					${team.players.slice(0, 4).map(p => `<div class="roster-avatar" title="${p}">${p.substring(0,2)}</div>`).join('')}
-					${team.players.length > 4 ? `<div class="roster-avatar">+${team.players.length - 4}</div>` : ''}
-				</div>
-			</div>
-		`).join('');
-	}
-
-	function renderPlayers() {
-		const query = searchInput.value.toLowerCase();
-		const region = regionFilter.value;
-
-		const filtered = playersData.filter(player => {
-			const matchesSearch = player.name.toLowerCase().includes(query) || player.team.toLowerCase().includes(query);
-			const matchesRegion = region === "ALL" || player.region === region;
-			return matchesSearch && matchesRegion;
+		const playerRows = document.querySelectorAll(".player-row");
+		playerRows.forEach(row => {
+			const name = row.getAttribute("data-name");
+			const team = row.getAttribute("data-team");
+			const rowRegion = row.getAttribute("data-region");
+			const matchesSearch = name.includes(query) || team.includes(query);
+			const matchesRegion = (region === "ALL" || rowRegion === region);
+			row.style.display = (matchesSearch && matchesRegion) ? "" : "none";
 		});
-
-		playersContainer.innerHTML = filtered.map(player => `
-			<tr>
-				<td>
-					<div class="player-cell">
-						<div class="player-avatar">${player.name.substring(0, 2).toUpperCase()}</div>
-						<span>${player.name}</span>
-					</div>
-				</td>
-				<td>${player.team}</td>
-				<td><span class="badge-role">${player.role}</span></td>
-				<td>${player.region}</td>
-				<td><strong>${player.kd}</strong></td>
-			</tr>
-		`).join('');
 	}
 
-	function openTeamModal(teamId) {
-		const team = teamsData.find(t => t.id === teamId);
-		if (!team) return;
-
-		modalTeamName.textContent = team.name;
-		modalTeamRegion.textContent = `Região: ${team.region}`;
-		modalTeamTournaments.textContent = team.tournaments;
-		modalTeamWinrate.textContent = team.winrate;
-
-		modalRosterList.innerHTML = team.players.map(player => `
-			<div class="roster-item">
-				<span style="font-weight: 700; color: #fff;">${player}</span>
-				<span class="badge-role">Jogador</span>
-			</div>
-		`).join('');
-
-		modal.classList.add("active");
-	}
-
-	modalClose.addEventListener("click", () => modal.classList.remove("active"));
-	modal.addEventListener("click", (e) => {
-		if (e.target === modal) modal.classList.remove("active");
-	});
-
-	searchInput.addEventListener("input", () => {
-		renderTeams();
-		renderPlayers();
-	});
-
-	regionFilter.addEventListener("change", () => {
-		renderTeams();
-		renderPlayers();
-	});
-
-	renderTeams();
-	renderPlayers();
+	searchInput.addEventListener("input", filterContent);
+	regionFilter.addEventListener("change", filterContent);
 </script>
 
 </body>

@@ -79,13 +79,12 @@
 	<header class="container nav">
 		<a class="logo" href="{% url 'pagina_inicial' %}" aria-label="NEXUS ARENA, página inicial"><span class="logo-mark" aria-hidden="true"></span>NEXUS ARENA</a>
 		<nav class="nav-links" aria-label="Navegação principal">
-			<a href="{% url 'comunidade' %}">Equipas</a>
+			<a href="{% url 'jogos' %}">Jogos</a>
 			<a href="{% url 'torneios' %}">Torneios</a>
-			<a href="{% url 'pagina_inicial' %}#ranking">Rankings</a>
 			<a href="{% url 'comunidade' %}">Comunidade</a>
 		</nav>
 		<div class="nav-actions">
-			<a class="btn btn-ghost" href="{% url 'pagina_inicial' %}">Página inicial</a>
+			<a class="btn btn-ghost" href="{% url 'pagina_inicial' %}">Explorar</a>
 			<a class="btn btn-primary" href="{% url 'login' %}">Entrar</a>
 		</div>
 	</header>
