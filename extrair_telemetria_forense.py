@@ -1,4 +1,4 @@
-# Copiar e colar todo este bloco no Terminal para criar e executar o extrator forense:
+
 cat << 'EOF' > extrair_telemetria_forense.py
 import json
 import os
@@ -58,24 +58,8 @@ if len(registos_telemetria_so) > 0:
     pd.DataFrame(registos_telemetria_so).drop_duplicates(subset=['ferramenta']).to_csv('ataques_teste.csv', index=False)
     with open('alertas_teste.json', 'w') as out:
         json.dump(alertas_wazuh_siem, out, indent=2)
-    print("Sucesso (Reconstrucao Forense e Timeline Analysis - SO vs. SIEM): Dados reais extraidos!")
-else:
-    # Modo de pré-teste caso ainda não tenham corrido os ataques reais na máquina
-    pd.DataFrame([
-        {'ferramenta': 'Execucao_PowerShell_LNK (Telemetria Sysmon Event ID 1)', 'timestamp_utc': '2026-11-12T11:30:00.120Z'},
-        {'ferramenta': 'ForcaBruta_SSH (Telemetria Journald Regra 5763)', 'timestamp_utc': '2026-11-12T11:34:15.000Z'},
-        {'ferramenta': 'Slowloris_DoS (Telemetria Rsyslog Regra 100110)', 'timestamp_utc': '2026-11-12T11:40:10.250Z'},
-        {'ferramenta': 'SQL_Injection (Telemetria Rsyslog Regra 100100)', 'timestamp_utc': '2026-11-12T11:45:00.500Z'}
-    ]).to_csv('ataques_teste.csv', index=False)
-    with open('alertas_teste.json', 'w') as out:
-        json.dump([
-            {'rule_id': '100150', 'timestamp': '2026-11-12T11:30:01.480Z', 'description': 'Sysmon Event ID 1 - Execucao Oculta PowerShell'},
-            {'rule_id': '5763',   'timestamp': '2026-11-12T11:34:16.000Z', 'description': 'SSH Brute Force - Active Response firewall-drop'},
-            {'rule_id': '100110', 'timestamp': '2026-11-12T11:40:12.100Z', 'description': 'Tentativa de Negacao de Servico Slowloris'},
-            {'rule_id': '100100', 'timestamp': '2026-11-12T11:45:01.390Z', 'description': 'Tentativa de SQL Injection Detetada'}
-        ], out, indent=2)
-    print("Sucesso (Simulacao de Reconstrucao Forense SO vs. SIEM): Ficheiros prontos para testar!")
-EOF
+    print("Sucesso (Reconstrucao Forense e Timeline Analysis - SO vs. SIEM): Dados reais extraidos!"
+          
 
 # Executar o extrator
 python3 extrair_telemetria_forense.py
