@@ -76,8 +76,8 @@
 				<h1 id="page-title">Cria a tua<br><span class="gradient-text">conta.</span></h1>
 				<p>Junta-te à comunidade, encontra a tua equipa e prepara-te para competir nos próximos torneios.</p>
 				<div class="benefits" aria-label="Vantagens de criar conta">
-					<div class="benefit"><span class="benefit-mark" aria-hidden="true">✓</span>Encontra a tua equipa</div>
-					<div class="benefit"><span class="benefit-mark" aria-hidden="true">✓</span>Entra em torneios</div>
+					<div class="benefit"><span class="benefit-mark" aria-hidden="true">&check;</span>Encontra a tua equipa</div>
+					<div class="benefit"><span class="benefit-mark" aria-hidden="true">&check;</span>Entra em torneios</div>
 				</div>
 			</section>
 
@@ -86,7 +86,6 @@
 					<h2 id="form-title">Registar jogador</h2>
 					<p>Preenche os teus dados para criar o perfil.</p>
 				</div>
-				<!-- Formulário configurado com POST e CSRF token -->
 				<form method="POST" action="{% url 'registo' %}" id="registration-form">
 					{% csrf_token %}
 					
@@ -113,7 +112,7 @@
 					</div>
 					<div class="field">
 						<label for="confirm-password">Confirmar palavra-passe</label>
-						<input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Repete a palavra-passe" required minlength="8">
+						<input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" placeholder="Insere a palavra-passe novamente" required minlength="8">
 					</div>
 					<label class="terms" for="terms">
 						<input id="terms" name="terms" type="checkbox" required>
@@ -130,20 +129,44 @@
 		const passwordInput = document.querySelector("#password");
 		const confirmPasswordInput = document.querySelector("#confirm-password");
 
-		function validatePasswordMatch() {
-			const matches = passwordInput.value === confirmPasswordInput.value;
-			confirmPasswordInput.setCustomValidity(matches ? "" : "As palavras-passe não coincidem.");
-			return matches;
-		}
+		function validateForm(event) {
+			let isValid = true;
+			
+			// Validação rigorosa do comprimento mínimo de 8 caracteres
+			if (passwordInput.value.length < 8) {
+				passwordInput.setCustomValidity("A palavra-passe precisa de ter pelo menos 8 caracteres.");
+				isValid = false;
+			} else {
+				passwordInput.setCustomValidity("");
+			}
 
-		passwordInput.addEventListener("input", validatePasswordMatch);
-		confirmPasswordInput.addEventListener("input", validatePasswordMatch);
-		
-		registrationForm.addEventListener("submit", (event) => {
-			if (!validatePasswordMatch()) {
+			// Validação se as palavras-passe coincidem
+			if (passwordInput.value !== confirmPasswordInput.value) {
+				confirmPasswordInput.setCustomValidity("As palavras-passe não coincidem.");
+				isValid = false;
+			} else {
+				confirmPasswordInput.setCustomValidity("");
+			}
+
+			if (!isValid) {
 				event.preventDefault();
 			}
+			return isValid;
+		}
+
+		passwordInput.addEventListener("input", () => {
+			if (passwordInput.value.length >= 8) {
+				passwordInput.setCustomValidity("");
+			}
 		});
+
+		confirmPasswordInput.addEventListener("input", () => {
+			if (passwordInput.value === confirmPasswordInput.value) {
+				confirmPasswordInput.setCustomValidity("");
+			}
+		});
+		
+		registrationForm.addEventListener("submit", validateForm);
 	</script>
 </body>
 </html>

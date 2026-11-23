@@ -1,7 +1,5 @@
-<!doctype html>
-<html lang="pt">
+<html>
 <head>
-	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#050811">
 	<title>Comunidade | NEXUS ARENA</title>
@@ -115,10 +113,12 @@
 			display:flex;
 			gap:12px;
 			flex:1;
-			max-width:500px;
+			max-width:650px;
+			flex-wrap:wrap;
 		}
 		.search-input{
-			width:100%;
+			flex:1;
+			min-width:200px;
 			height:44px;
 			padding:0 16px;
 			border:1px solid var(--line);
@@ -159,6 +159,7 @@
 			transition:.25s;
 			position:relative;
 			overflow:hidden;
+			cursor:pointer;
 		}
 		.team-card:hover{
 			transform:translateY(-5px);
@@ -178,7 +179,8 @@
 			border:1px solid var(--line);
 			display:grid;
 			place-items:center;
-			font-size:22px;
+			font-size:13px;
+			font-weight:900;
 			color:var(--cyan);
 			flex-shrink:0;
 		}
@@ -239,6 +241,7 @@
 			letter-spacing:1px;
 		}
 		.players-table tr:last-child td{border-bottom:0}
+		.players-table tr{cursor:pointer; transition: background .2s;}
 		.players-table tr:hover td{background:rgba(255,255,255,.02)}
 		.player-cell{
 			display:flex;
@@ -265,6 +268,57 @@
 			background:rgba(0,210,255,.1);
 			color:var(--cyan);
 			border:1px solid rgba(0,210,255,.2);
+		}
+
+		/* POP-UP STYLES */
+		.popup-overlay {
+			display: none;
+			position: fixed;
+			inset: 0;
+			background: rgba(0,0,0,0.8);
+			z-index: 100;
+			justify-content: center;
+			align-items: center;
+		}
+		.popup-box {
+			background: var(--panel);
+			border: 1px solid var(--line);
+			padding: 30px;
+			border-radius: 16px;
+			width: min(420px, 90%);
+			text-align: left;
+			position: relative;
+			box-shadow: 0 20px 50px rgba(0,0,0,.6);
+		}
+		.popup-box h3 {
+			color: var(--cyan);
+			margin-top: 0;
+			font-size: 22px;
+			border-bottom: 1px solid var(--line);
+			padding-bottom: 10px;
+		}
+		.popup-info {
+			color: var(--muted);
+			font-size: 14px;
+			line-height: 1.8;
+			margin: 20px 0;
+		}
+		.popup-info strong {
+			color: #fff;
+		}
+		.popup-close {
+			width: 100%;
+			padding: 12px;
+			background: linear-gradient(100deg, var(--red), var(--blue));
+			border: 0;
+			color: #fff;
+			border-radius: 8px;
+			font-weight: bold;
+			cursor: pointer;
+			transition: filter .2s;
+		}
+		.popup-close:hover {
+			filter: brightness(1.1);
 		}
 
 		footer{padding:35px 0 50px;color:var(--muted);font-size:12px;margin-top:auto}
@@ -298,13 +352,13 @@
 		<a class="btn btn-ghost" href="{% url 'torneios' %}">Explorar</a>
 		<a class="btn btn-primary" href="{% url 'login' %}">Entrar</a>
 	</div>
-	<button class="mobile-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-navigation">☰</button>
+	<button class="mobile-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-navigation">&equiv;</button>
 </header>
 
 <main class="container">
 	<section class="page-header">
 		<div class="eyebrow">Hub da Comunidade</div>
-		<h1>Equipas & <span class="gradient-text">Jogadores</span></h1>
+		<h1>Equipas &amp; <span class="gradient-text">Jogadores</span></h1>
 		<p class="page-desc">Explora as equipas ativas, descobre novos talentos e consulta os planteis da NEXUS ARENA.</p>
 	</section>
 
@@ -317,30 +371,48 @@
 		<div class="search-filter">
 			<input type="text" class="search-input" id="search-input" placeholder="Pesquisar equipa ou jogador...">
 			<select class="filter-select" id="region-filter">
-				<option value="ALL">Todas as Regiões / Países</option>
+				<option value="ALL">Todas as Regiões</option>
 				<option value="Portugal">Portugal</option>
 				<option value="Brasil">Brasil</option>
 				<option value="Alemanha">Alemanha</option>
 			</select>
+			<select class="filter-select" id="team-wins-filter" style="display:inline-block;">
+				<option value="ALL">Todas as Vitórias</option>
+				<option value="high">3+ Vitórias</option>
+				<option value="low">Menos de 3 Vitórias</option>
+			</select>
+			<select class="filter-select" id="player-role-filter" style="display:none;">
+				<option value="ALL">Todas as Funções</option>
+				<option value="IGL">IGL</option>
+				<option value="AWPer">AWPer</option>
+				<option value="Entry Fragger">Entry Fragger</option>
+				<option value="Rifler">Rifler</option>
+				<option value="Lurker">Lurker</option>
+				<option value="Support">Support</option>
+			</select>
 		</div>
 	</div>
 
-	<!-- Secção de Equipas (Base de Dados) -->
 	<section class="view-section active" id="section-teams">
 		<div class="grid-teams" id="teams-container">
 			{% for equipa in equipas %}
-			<div class="team-card" data-name="{{ equipa.nome|lower }}" data-region="{{ equipa.pais }}">
+			<div class="team-card" 
+				data-name="{{ equipa.nome|lower }}" 
+				data-region="{{ equipa.pais }}"
+				data-wins="{{ equipa.vitorias }}"
+				data-tag="{{ equipa.tag }}"
+				data-losses="{{ equipa.derrotas }}">
 				<div class="team-header">
-					<div class="team-icon">🛡️</div>
+					<div class="team-icon">EQUIPA</div>
 					<div class="team-info">
 						<h3>{{ equipa.nome }} ({{ equipa.tag }})</h3>
-						<p>País: {{ equipa.pais|default:"N/D" }}</p>
+						<p>Pa&iacute;s: {{ equipa.pais|default:"N/D" }}</p>
 					</div>
 				</div>
 				<div class="team-stats">
 					<div class="team-stat">
 						<span class="team-stat-val">{{ equipa.vitorias }}</span>
-						<span class="team-stat-lbl">Vitórias</span>
+						<span class="team-stat-lbl">Vit&oacute;rias</span>
 					</div>
 					<div class="team-stat">
 						<span class="team-stat-val">{{ equipa.derrotas }}</span>
@@ -354,7 +426,6 @@
 		</div>
 	</section>
 
-	<!-- Secção de Jogadores (Base de Dados) -->
 	<section class="view-section" id="section-players">
 		<div class="players-table-wrap">
 			<table class="players-table">
@@ -362,14 +433,19 @@
 					<tr>
 						<th>Jogador</th>
 						<th>Equipa</th>
-						<th>Função</th>
-						<th>País</th>
+						<th>Fun&ccedil;&atilde;o</th>
+						<th>Pa&iacute;s</th>
 						<th>KDA</th>
 					</tr>
 				</thead>
 				<tbody id="players-container">
 					{% for jogador in jogadores %}
-					<tr class="player-row" data-name="{{ jogador.1|lower }}" data-team="{{ jogador.3|default:''|lower }}" data-region="{{ jogador.2 }}">
+					<tr class="player-row" 
+						data-name="{{ jogador.1|lower }}" 
+						data-team="{{ jogador.3|default:''|lower }}" 
+						data-region="{{ jogador.2 }}"
+						data-role="{{ jogador.4|default:'Rifler' }}"
+						data-kda="{{ jogador.5|default:0 }}">
 						<td>
 							<div class="player-cell">
 								<div class="player-avatar">{{ jogador.1|slice:":2"|upper }}</div>
@@ -392,11 +468,19 @@
 	</section>
 </main>
 
+<div id="community-popup" class="popup-overlay">
+	<div class="popup-box">
+		<h3 id="popup-title">Detalhes</h3>
+		<div class="popup-info" id="popup-content"></div>
+		<button class="popup-close" onclick="closePopup()">Fechar</button>
+	</div>
+</div>
+
 <footer>
 	<div class="container footer-inner">
-		<span>© 2026 NEXUS ARENA</span>
+		<span>&copy; 2026 NEXUS ARENA</span>
 		<div class="footer-links">
-			<a href="#">Termos de serviço</a>
+			<a href="#">Termos de servi&ccedil;o</a>
 			<a href="#">Privacidade</a>
 		</div>
 	</div>
@@ -410,6 +494,13 @@
 
 	const searchInput = document.getElementById("search-input");
 	const regionFilter = document.getElementById("region-filter");
+	const teamWinsFilter = document.getElementById("team-wins-filter");
+	const playerRoleFilter = document.getElementById("player-role-filter");
+
+	const popupOverlay = document.getElementById("community-popup");
+	const popupTitle = document.getElementById("popup-title");
+	const popupContent = document.getElementById("popup-content");
+
 	const mobileMenu = document.querySelector(".mobile-menu");
 	const primaryNavigation = document.getElementById("primary-navigation");
 
@@ -428,12 +519,14 @@
 		}
 	});
 
-	// Alternar abas Equipas / Jogadores (exclusivo, nunca aparecem os dois ao mesmo tempo)
 	btnTabTeams.addEventListener("click", () => {
 		btnTabTeams.classList.add("active");
 		btnTabPlayers.classList.remove("active");
 		sectionTeams.classList.add("active");
 		sectionPlayers.classList.remove("active");
+		teamWinsFilter.style.display = "inline-block";
+		playerRoleFilter.style.display = "none";
+		filterContent();
 	});
 
 	btnTabPlayers.addEventListener("click", () => {
@@ -441,20 +534,73 @@
 		btnTabTeams.classList.remove("active");
 		sectionPlayers.classList.add("active");
 		sectionTeams.classList.remove("active");
+		teamWinsFilter.style.display = "none";
+		playerRoleFilter.style.display = "inline-block";
+		filterContent();
 	});
 
-	// Filtragem dinâmica de pesquisa e região
+	document.querySelectorAll(".team-card").forEach(card => {
+		card.addEventListener("click", () => {
+			const name = card.querySelector("h3").textContent;
+			const region = card.getAttribute("data-region");
+			const wins = card.getAttribute("data-wins");
+			const losses = card.getAttribute("data-losses");
+
+			popupTitle.textContent = "Detalhes da Equipa";
+			popupContent.innerHTML = `
+				Nome: <strong>${name}</strong><br>
+				Pa&iacute;s: <strong>${region || 'N/D'}</strong><br>
+				Vit&oacute;rias: <strong>${wins}</strong><br>
+				Derrotas: <strong>${losses}</strong>
+			`;
+			popupOverlay.style.display = "flex";
+		});
+	});
+
+	document.querySelectorAll(".player-row").forEach(row => {
+		row.addEventListener("click", () => {
+			const name = row.querySelector(".player-cell span").textContent;
+			const team = row.children[1].textContent;
+			const role = row.children[2].textContent;
+			const region = row.children[3].textContent;
+			const kda = row.children[4].textContent;
+
+			popupTitle.textContent = "Detalhes do Jogador";
+			popupContent.innerHTML = `
+				Nickname: <strong>${name}</strong><br>
+				Equipa: <strong>${team}</strong><br>
+				Fun&ccedil;&atilde;o: <strong>${role}</strong><br>
+				Pa&iacute;s: <strong>${region}</strong><br>
+				KDA M&eacute;dio: <strong>${kda}</strong>
+			`;
+			popupOverlay.style.display = "flex";
+		});
+	});
+
+	function closePopup() {
+		popupOverlay.style.display = "none";
+	}
+
 	function filterContent() {
 		const query = searchInput.value.toLowerCase();
 		const region = regionFilter.value;
+		const teamWins = teamWinsFilter.value;
+		const playerRole = playerRoleFilter.value;
 
 		const teamCards = document.querySelectorAll(".team-card");
 		teamCards.forEach(card => {
 			const name = card.getAttribute("data-name");
 			const cardRegion = card.getAttribute("data-region");
+			const wins = parseInt(card.getAttribute("data-wins"), 10);
+
 			const matchesSearch = name.includes(query);
 			const matchesRegion = (region === "ALL" || cardRegion === region);
-			card.style.display = (matchesSearch && matchesRegion) ? "flex" : "none";
+			
+			let matchesWins = true;
+			if (teamWins === "high") matchesWins = (wins >= 3);
+			if (teamWins === "low") matchesWins = (wins < 3);
+
+			card.style.display = (matchesSearch && matchesRegion && matchesWins) ? "flex" : "none";
 		});
 
 		const playerRows = document.querySelectorAll(".player-row");
@@ -462,14 +608,20 @@
 			const name = row.getAttribute("data-name");
 			const team = row.getAttribute("data-team");
 			const rowRegion = row.getAttribute("data-region");
+			const role = row.getAttribute("data-role");
+
 			const matchesSearch = name.includes(query) || team.includes(query);
 			const matchesRegion = (region === "ALL" || rowRegion === region);
-			row.style.display = (matchesSearch && matchesRegion) ? "" : "none";
+			const matchesRole = (playerRole === "ALL" || role === playerRole);
+
+			row.style.display = (matchesSearch && matchesRegion && matchesRole) ? "" : "none";
 		});
 	}
 
 	searchInput.addEventListener("input", filterContent);
 	regionFilter.addEventListener("change", filterContent);
+	teamWinsFilter.addEventListener("change", filterContent);
+	playerRoleFilter.addEventListener("change", filterContent);
 </script>
 
 </body>

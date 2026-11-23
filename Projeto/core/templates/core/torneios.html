@@ -1,7 +1,5 @@
-<!doctype html>
-<html lang="pt">
+<html>
 <head>
-	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#050811">
 	<title>Torneios | NEXUS ARENA</title>
@@ -48,19 +46,25 @@
 		.page-heading p{max-width:470px;margin:0;color:var(--muted);font-size:15px;line-height:1.7}
 		.heading-note{flex:none;padding:13px 16px;border:1px solid var(--line);border-radius:10px;background:rgba(15,23,42,.72);color:var(--muted);font-size:12px}
 		.heading-note strong{color:#fff}
-		.section-title{display:flex;align-items:center;gap:11px;margin:0 0 16px;font-size:19px}
+		
+		.section-title{display:flex;align-items:center;gap:11px;margin:30px 0 16px;font-size:19px}
 		.live-mark{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 12px rgba(255,42,75,.7)}
+		.live-mark.upcoming{background:var(--cyan);box-shadow:0 0 12px rgba(0,210,255,.7)}
+		.live-mark.finished{background:var(--muted);box-shadow:none}
+
 		.tournaments{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 		.tournament{min-height:200px;display:flex;flex-direction:column;padding:19px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(5,8,17,.96));transition:transform .2s,border-color .2s}
 		.tournament:hover{transform:translateY(-3px);border-color:rgba(0,210,255,.42)}
 		.t-top,.t-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}
 		.tag{padding:6px 8px;border-radius:6px;background:rgba(255,42,75,.13);color:var(--red);font-size:10px;font-weight:900;letter-spacing:.8px;text-transform:uppercase}
 		.tag.upcoming{background:rgba(0,210,255,.1);color:var(--cyan)}
+		.tag.concluido{background:rgba(255,255,255,.08);color:var(--muted)}
 		.prize{font-size:14px;font-weight:900}
 		.tournament h3{margin:22px 0 7px;font-size:17px;color:#fff}
 		.meta{margin:0;color:var(--muted);font-size:12px}
 		.t-bottom{margin-top:auto;color:var(--muted);font-size:11px}
 		.empty-state{padding:24px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center;grid-column: span 3;}
+		
 		@media(max-width:850px){
 			.nav-links{display:none}.page-heading{align-items:flex-start;flex-direction:column}.heading-note{display:none}
 			.tournaments{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -69,7 +73,6 @@
 		@media(max-width:560px){
 			.container{width:calc(100% - 28px)}.nav{height:68px}.logo{font-size:18px}.logo-mark{width:30px;height:30px}
 			.nav-actions .btn-ghost{display:none}main{padding:38px 0 65px}h1{font-size:44px;letter-spacing:-2px}
-			.page-heading p{font-size:14px}
 			.tournaments{grid-template-columns:1fr}
 			.empty-state{grid-column: span 1;}
 		}
@@ -99,24 +102,74 @@
 			<div class="heading-note">Base de dados <strong>MySQL</strong></div>
 		</section>
 
-		<section id="disponiveis" aria-labelledby="available-title">
-			<h2 class="section-title" id="available-title"><span class="live-mark" aria-hidden="true"></span>Torneios Registados</h2>
-			<div class="tournaments" id="available-list">
+		<section aria-labelledby="running-title">
+			<h2 class="section-title" id="running-title"><span class="live-mark" aria-hidden="true"></span>Em Andamento</h2>
+			<div class="tournaments">
 				{% for t in torneios %}
-				<a href="{% url 'detalhe_torneio' t.id %}" class="tournament">
-					<div class="t-top">
-						<span class="tag {% if t.estado == 'Planeado' or t.estado == 'Em andamento' and False %}upcoming{% endif %}">{{ t.estado }}</span>
-						<span class="prize">{{ t.formato }}</span>
-					</div>
-					<h3>{{ t.nome }}</h3>
-					<p class="meta">{{ t.jogo }} · Início: {{ t.data_inicio }}</p>
-					<div class="t-bottom">
-						<span>Fim: {{ t.data_fim|default:"Por definir" }}</span>
-						<span style="color: var(--cyan); font-weight: 700;">Ver detalhes →</span>
-					</div>
-				</a>
+					{% if t.estado == 'Em andamento' %}
+					<a href="{% url 'detalhe_torneio' t.id %}" class="tournament">
+						<div class="t-top">
+							<span class="tag">Em andamento</span>
+							<span class="prize">{{ t.formato }}</span>
+						</div>
+						<h3>{{ t.nome }}</h3>
+						<p class="meta">{{ t.jogo }} · Início: {{ t.data_inicio }}</p>
+						<div class="t-bottom">
+							<span>Fim: {{ t.data_fim|default:"Por definir" }}</span>
+							<span style="color: var(--cyan); font-weight: 700;">Ver detalhes &rarr;</span>
+						</div>
+					</a>
+					{% endif %}
 				{% empty %}
-				<p class="empty-state">Não foram encontrados torneios na base de dados.</p>
+				<p class="empty-state">Não existem torneios em andamento.</p>
+				{% endfor %}
+			</div>
+		</section>
+
+		<section aria-labelledby="upcoming-title" style="margin-top: 40px;">
+			<h2 class="section-title" id="upcoming-title"><span class="live-mark upcoming" aria-hidden="true"></span>Planeados</h2>
+			<div class="tournaments">
+				{% for t in torneios %}
+					{% if t.estado == 'Planeado' %}
+					<a href="{% url 'detalhe_torneio' t.id %}" class="tournament">
+						<div class="t-top">
+							<span class="tag upcoming">Planeado</span>
+							<span class="prize">{{ t.formato }}</span>
+						</div>
+						<h3>{{ t.nome }}</h3>
+						<p class="meta">{{ t.jogo }} · Início: {{ t.data_inicio }}</p>
+						<div class="t-bottom">
+							<span>Fim: {{ t.data_fim|default:"Por definir" }}</span>
+							<span style="color: var(--cyan); font-weight: 700;">Ver detalhes &rarr;</span>
+						</div>
+					</a>
+					{% endif %}
+				{% empty %}
+				<p class="empty-state">Não existem torneios planeados.</p>
+				{% endfor %}
+			</div>
+		</section>
+
+		<section aria-labelledby="finished-title" style="margin-top: 40px;">
+			<h2 class="section-title" id="finished-title"><span class="live-mark finished" aria-hidden="true"></span>Concluídos</h2>
+			<div class="tournaments">
+				{% for t in torneios %}
+					{% if t.estado == 'Concluido' %}
+					<a href="{% url 'detalhe_torneio' t.id %}" class="tournament">
+						<div class="t-top">
+							<span class="tag concluido">Concluído</span>
+							<span class="prize">{{ t.formato }}</span>
+						</div>
+						<h3>{{ t.nome }}</h3>
+						<p class="meta">{{ t.jogo }} · Início: {{ t.data_inicio }}</p>
+						<div class="t-bottom">
+							<span>Fim: {{ t.data_fim|default:"Por definir" }}</span>
+							<span style="color: var(--cyan); font-weight: 700;">Ver detalhes &rarr;</span>
+						</div>
+					</a>
+					{% endif %}
+				{% empty %}
+				<p class="empty-state">Não existem torneios concluídos.</p>
 				{% endfor %}
 			</div>
 		</section>
@@ -124,7 +177,7 @@
 
 	<footer class="container" style="padding:0 0 32px;color:var(--muted);font-size:12px">
 		<div style="border-top:1px solid rgba(255,255,255,.12);padding-top:20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap">
-			<span>© 2026 NEXUS ARENA</span>
+			<span>&copy; 2026 NEXUS ARENA</span>
 			<a href="{% url 'pagina_inicial' %}">Voltar à página inicial</a>
 		</div>
 	</footer>

@@ -1,7 +1,5 @@
-<!doctype html>
-<html lang="pt">
+<html>
 <head>
-	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#050811">
 	<title>Jogos | NEXUS ARENA</title>
@@ -130,7 +128,6 @@
 		}
 		.search-input:focus{border-color:var(--cyan)}
 
-		/* Lista / Cartões de Partidas */
 		.matches-list{
 			display:grid;
 			gap:16px;
@@ -145,6 +142,7 @@
 			align-items:center;
 			gap:20px;
 			transition:.25s;
+			cursor: pointer;
 		}
 		.match-card:hover{
 			border-color:var(--cyan);
@@ -291,7 +289,6 @@
 	</section>
 
 	<div class="controls-bar">
-		<!-- Filtro Toggle Exclusivo (Concluídos ativo por defeito) -->
 		<div class="tabs">
 			<button class="tab-btn active" id="btn-tab-concluidos">Concluídos</button>
 			<button class="tab-btn" id="btn-tab-agendados">Agendados</button>
@@ -308,13 +305,11 @@
 			data-status="{{ partida.estado }}" 
 			data-search="{{ partida.equipa1.nome|lower }} {{ partida.equipa2.nome|lower }} {{ partida.torneio.nome|lower }}">
 			
-			<!-- Coluna Esquerda: Torneio e Fase -->
 			<div class="match-meta">
 				<span class="match-tournament">{{ partida.torneio.nome }}</span>
 				<span class="match-details">{{ partida.fase }} · {{ partida.formato }}</span>
 			</div>
 
-			<!-- Coluna Central: Equipas e Resultado -->
 			<div class="match-teams">
 				<div class="team-side left">
 					<span class="{% if partida.vencedor_id == partida.equipa1_id %}winner-name{% elif partida.estado == 'Concluida' %}loser-name{% endif %}">
@@ -341,7 +336,6 @@
 				</div>
 			</div>
 
-			<!-- Coluna Direita: Estado e Data -->
 			<div class="match-status-col">
 				{% if partida.estado == 'Concluida' %}
 					<span class="status-badge status-concluida">Concluída</span>
@@ -360,6 +354,14 @@
 		</p>
 	</section>
 </main>
+
+<div id="game-popup" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:100; justify-content:center; align-items:center;">
+    <div style="background:var(--panel); border:1px solid var(--line); padding:30px; border-radius:16px; width:min(400px, 90%); text-align:center; position:relative;">
+        <h3 id="popup-title" style="color:var(--cyan); margin-top:0;">Detalhes do Jogo</h3>
+        <p id="popup-content" style="color:var(--muted); font-size:14px; line-height:1.6;"></p>
+        <button onclick="closeGamePopup()" style="margin-top:20px; padding:10px 20px; background:var(--red); border:0; color:#fff; border-radius:8px; font-weight:bold; cursor:pointer;">Fechar</button>
+    </div>
+</div>
 
 <footer>
 	<div class="container footer-inner">
@@ -381,7 +383,10 @@
 	const mobileMenu = document.querySelector(".mobile-menu");
 	const primaryNavigation = document.getElementById("primary-navigation");
 
-	// Estado inicial por defeito: 'Concluida'
+	const gamePopup = document.getElementById("game-popup");
+	const popupTitle = document.getElementById("popup-title");
+	const popupContent = document.getElementById("popup-content");
+
 	let currentFilter = "Concluida";
 
 	mobileMenu.addEventListener("click", () => {
@@ -399,6 +404,23 @@
 		}
 	});
 
+	matchCards.forEach(card => {
+		card.addEventListener("click", () => {
+			const tournament = card.querySelector(".match-tournament").textContent;
+			const details = card.querySelector(".match-details").textContent;
+			const status = card.querySelector(".status-badge").textContent;
+			const date = card.querySelector(".match-date").textContent;
+
+			popupTitle.textContent = tournament;
+			popupContent.innerHTML = `Fase/Formato: <strong>${details}</strong><br>Estado: <strong>${status}</strong><br>Data: <strong>${date}</strong>`;
+			gamePopup.style.display = "flex";
+		});
+	});
+
+	function closeGamePopup() {
+		gamePopup.style.display = "none";
+	}
+
 	function filterMatches() {
 		const query = searchInput.value.toLowerCase();
 		let visibleCount = 0;
@@ -407,7 +429,6 @@
 			const status = card.getAttribute("data-status");
 			const searchText = card.getAttribute("data-search");
 
-			// Verifica correspondência com o toggle ativo ('Concluida' ou 'Agendada')
 			const matchesStatus = (status === currentFilter);
 			const matchesSearch = searchText.includes(query);
 
@@ -422,27 +443,23 @@
 		noResultsMsg.style.display = (visibleCount === 0 && matchCards.length > 0) ? "block" : "none";
 	}
 
-	// Toggle: Concluídos
 	btnConcluidos.addEventListener("click", () => {
-		if (currentFilter === "Concluida") return; // Mantém sempre um ativo
+		if (currentFilter === "Concluida") return;
 		currentFilter = "Concluida";
 		btnConcluidos.classList.add("active");
 		btnAgendados.classList.remove("active");
 		filterMatches();
 	});
 
-	// Toggle: Agendados
 	btnAgendados.addEventListener("click", () => {
-		if (currentFilter === "Agendada") return; // Mantém sempre um ativo
+		if (currentFilter === "Agendada") return;
 		currentFilter = "Agendada";
 		btnAgendados.classList.add("active");
 		btnConcluidos.classList.remove("active");
 		filterMatches();
 	});
 
-	searchInput.addEventListener("input", filterMatches);
-
-	// Aplicar filtro inicial ao carregar a página (mostra Concluídos por defeito)
+    searchInput.addEventListener("input", filterMatches);
 	filterMatches();
 </script>
 
