@@ -1,7 +1,17 @@
 To do list - Website
 
-Diogo: Alterar os jogos agendados e concluidos em torneios para só aparecer se existirem jogos agendados ou concluidos.
+Diogo: Alterar página inicial.
+Pagina jogos: Clicando num jogo, aparecer um pop-up com os detalhes do jogo.
+Pagina torneios: Separar os torneios por concluido, em andamento e planeado.
+Detalhes torneio: Alterar os jogos agendados e concluidos em torneios para só aparecer se existirem jogos agendados ou concluidos. Clicando num jogo, aparecer um pop-up com os detalhes do jogo.
+Pagina comunidade: Clicando numa equipa ou jogador, aparecer um pop-up com os detalhes da equipa ou jogador. Adicionar mais filtros para equipas e jogadores.
 Alterar base de dados: Rifler para Lurker em jogador_equipa; Remover pontos em inscricoes_torneios e steamid em jogadores.
+Alterar os requisitos mínimos da password e a opção "mostrar password".
+Ao criar conta, logar automaticamente ou ser redirecionado para a página de login.
+Quando logado, trocar o botão de login por botão de perfil.
+Adicionar opção para criar equipas e entrar em equipas.
+Adicionar página de gestão de equipa.
+Remover login de admin (para a versão segura, na vulnerável pode ficar)
 
 Joana: 
 
