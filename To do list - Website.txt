@@ -2,8 +2,6 @@ To do list - Website
 
 Diogo: Alterar página inicial.
 Alterar base de dados: Rifler para Lurker em jogador_equipa; Remover pontos em inscricoes_torneios e steamid em jogadores; Remover nome em utilizadores (remover também o nome na página registar).
-Ao criar conta, logar automaticamente ou ser redirecionado para a página de login.
-Quando logado, trocar o botão de login por botão de perfil.
 Adicionar opção para criar equipas e entrar em equipas.
 Adicionar página de gestão de equipa.
 Remover login de admin (para a versão segura, na vulnerável pode ficar)
