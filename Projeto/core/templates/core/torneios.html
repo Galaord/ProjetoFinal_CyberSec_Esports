@@ -28,16 +28,33 @@
 		a{color:inherit;text-decoration:none}
 		button{font:inherit}
 		.container{width:min(1180px,calc(100% - 40px));margin:auto}
-		.nav{height:78px;display:flex;align-items:center;justify-content:space-between}
+		.nav{height:78px;display:flex;align-items:center;justify-content:space-between;position:relative;z-index:10}
 		.logo{display:flex;align-items:center;gap:10px;font-size:21px;font-weight:900;letter-spacing:-1px}
 		.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--blue));transform:skew(-12deg);box-shadow:0 0 30px rgba(255,42,75,.4)}
 		.nav-links{display:flex;gap:28px;color:var(--muted);font-size:14px;font-weight:700}
 		.nav-links a:hover,.back-link:hover{color:var(--cyan)}
 		.nav-actions{display:flex;align-items:center;gap:10px}
-		.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 17px;border:1px solid var(--line);border-radius:10px;font-size:13px;font-weight:800;transition:transform .2s,border-color .2s}
+		.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 17px;border:1px solid var(--line);border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;color:#ffffff;transition:transform .2s,border-color .2s}
 		.btn:hover{transform:translateY(-2px);border-color:var(--cyan)}
 		.btn-ghost{background:rgba(255,255,255,.05)}
 		.btn-primary{border:0;background:linear-gradient(100deg,var(--red),var(--blue));box-shadow:0 10px 35px rgba(0,102,255,.25)}
+
+		/* Dropdown de utilizador autenticado */
+		.user-dropdown{position:relative;display:inline-block}
+		.dropdown-menu{
+			display:none;position:absolute;top:calc(100% + 8px);right:0;min-width:190px;
+			padding:8px;border:1px solid var(--line);border-radius:12px;
+			background:var(--panel);box-shadow:0 18px 40px rgba(0,0,0,.55);z-index:50;
+		}
+		.user-dropdown.open .dropdown-menu{display:flex;flex-direction:column;gap:4px}
+		.dropdown-item{
+			display:flex;align-items:center;padding:10px 14px;border-radius:8px;
+			font-size:13px;font-weight:700;color:#ffffff;transition:.15s;
+		}
+		.dropdown-item:hover{background:rgba(255,255,255,.07);color:var(--cyan)}
+		.dropdown-item.danger{color:#ff758a;border-top:1px solid var(--line);margin-top:4px;padding-top:12px;border-radius:0 0 8px 8px}
+		.dropdown-item.danger:hover{background:rgba(255,42,75,.12);color:#ff2a4b}
+
 		main{padding:54px 0 90px}
 		.page-heading{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:34px}
 		.eyebrow{color:var(--red);font-size:12px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
@@ -87,8 +104,20 @@
 			<a href="{% url 'comunidade' %}">Comunidade</a>
 		</nav>
 		<div class="nav-actions">
-			<a class="btn btn-ghost" href="{% url 'pagina_inicial' %}">Explorar</a>
-			<a class="btn btn-primary" href="{% url 'login' %}">Entrar</a>
+			{% if request.session.utilizador_nickname %}
+				<div class="user-dropdown" id="userDropdown">
+					<button class="btn btn-primary" type="button" id="userDropdownBtn" aria-expanded="false" aria-controls="userDropdownMenu">
+						{{ request.session.utilizador_nickname }} ▾
+					</button>
+					<div class="dropdown-menu" id="userDropdownMenu" role="menu">
+						<a class="dropdown-item" href="#" role="menuitem">Perfil</a>
+						<a class="dropdown-item" href="#" role="menuitem">Equipa</a>
+						<a class="dropdown-item danger" href="{% url 'logout' %}" role="menuitem">Terminar Sessão</a>
+					</div>
+				</div>
+			{% else %}
+				<a class="btn btn-primary" href="{% url 'login' %}">Entrar</a>
+			{% endif %}
 		</div>
 	</header>
 
@@ -181,5 +210,25 @@
 			<a href="{% url 'pagina_inicial' %}">Voltar à página inicial</a>
 		</div>
 	</footer>
+
+	<script>
+		const userDropdown = document.getElementById("userDropdown");
+		const userDropdownBtn = document.getElementById("userDropdownBtn");
+
+		if (userDropdown && userDropdownBtn) {
+			userDropdownBtn.addEventListener("click", (event) => {
+				event.stopPropagation();
+				const isOpen = userDropdown.classList.toggle("open");
+				userDropdownBtn.setAttribute("aria-expanded", String(isOpen));
+			});
+
+			document.addEventListener("click", (event) => {
+				if (!userDropdown.contains(event.target)) {
+					userDropdown.classList.remove("open");
+					userDropdownBtn.setAttribute("aria-expanded", "false");
+				}
+			});
+		}
+	</script>
 </body>
 </html>

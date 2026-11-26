@@ -1,5 +1,6 @@
 <html>
 <head>
+	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="theme-color" content="#050811">
 	<title>Jogos | NEXUS ARENA</title>
@@ -65,6 +66,22 @@
 			box-shadow:0 10px 35px rgba(0,102,255,.3)
 		}
 		.mobile-menu{display:none}
+
+		/* Dropdown de utilizador autenticado */
+		.user-dropdown{position:relative;display:inline-block}
+		.dropdown-menu{
+			display:none;position:absolute;top:calc(100% + 8px);right:0;min-width:190px;
+			padding:8px;border:1px solid var(--line);border-radius:12px;
+			background:var(--panel);box-shadow:0 18px 40px rgba(0,0,0,.55);z-index:50;
+		}
+		.user-dropdown.open .dropdown-menu{display:flex;flex-direction:column;gap:4px}
+		.dropdown-item{
+			display:flex;align-items:center;padding:10px 14px;border-radius:8px;
+			font-size:13px;font-weight:700;color:#ffffff;transition:.15s;
+		}
+		.dropdown-item:hover{background:rgba(255,255,255,.07);color:var(--cyan)}
+		.dropdown-item.danger{color:#ff758a;border-top:1px solid var(--line);margin-top:4px;padding-top:12px;border-radius:0 0 8px 8px}
+		.dropdown-item.danger:hover{background:rgba(255,42,75,.12);color:#ff2a4b}
 
 		main{flex:1;padding-bottom:80px}
 		
@@ -275,8 +292,20 @@
 		<a href="{% url 'comunidade' %}">Comunidade</a>
 	</nav>
 	<div class="nav-actions">
-		<a class="btn btn-ghost" href="{% url 'torneios' %}">Explorar</a>
-		<a class="btn btn-primary" href="{% url 'login' %}">Entrar</a>
+		{% if request.session.utilizador_nickname %}
+			<div class="user-dropdown" id="userDropdown">
+				<button class="btn btn-primary" type="button" id="userDropdownBtn" aria-expanded="false" aria-controls="userDropdownMenu">
+					{{ request.session.utilizador_nickname }} ▾
+				</button>
+				<div class="dropdown-menu" id="userDropdownMenu" role="menu">
+					<a class="dropdown-item" href="#" role="menuitem">Perfil</a>
+					<a class="dropdown-item" href="#" role="menuitem">Equipa</a>
+					<a class="dropdown-item danger" href="{% url 'logout' %}" role="menuitem">Terminar Sessão</a>
+				</div>
+			</div>
+		{% else %}
+			<a class="btn btn-primary" href="{% url 'login' %}">Entrar</a>
+		{% endif %}
 	</div>
 	<button class="mobile-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="primary-navigation">☰</button>
 </header>
@@ -404,6 +433,24 @@
 		}
 	});
 
+	const userDropdown = document.getElementById("userDropdown");
+	const userDropdownBtn = document.getElementById("userDropdownBtn");
+
+	if (userDropdown && userDropdownBtn) {
+		userDropdownBtn.addEventListener("click", (event) => {
+			event.stopPropagation();
+			const isOpen = userDropdown.classList.toggle("open");
+			userDropdownBtn.setAttribute("aria-expanded", String(isOpen));
+		});
+
+		document.addEventListener("click", (event) => {
+			if (!userDropdown.contains(event.target)) {
+				userDropdown.classList.remove("open");
+				userDropdownBtn.setAttribute("aria-expanded", "false");
+			}
+		});
+	}
+
 	matchCards.forEach(card => {
 		card.addEventListener("click", () => {
 			const tournament = card.querySelector(".match-tournament").textContent;
@@ -459,7 +506,7 @@
 		filterMatches();
 	});
 
-    searchInput.addEventListener("input", filterMatches);
+	searchInput.addEventListener("input", filterMatches);
 	filterMatches();
 </script>
 
