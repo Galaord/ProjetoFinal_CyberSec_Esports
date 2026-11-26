@@ -92,7 +92,7 @@ def registo_view(request):
                         "INSERT INTO utilizadores (nome, nickname, email, password) VALUES (%s, %s, %s, %s)",
                         [nome, username, email, hashed_password]
                     )
-                    return redirect('pagina_inicial')
+                    return redirect('login')
                     
     return render(request, 'core/registo.html', {'error': erro})
 
