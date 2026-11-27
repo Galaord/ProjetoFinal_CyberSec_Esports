@@ -1,0 +1,57 @@
+<!-- Local rules -->
+
+<!-- Modify it at your will. -->
+<!-- Copyright (C) 2015, Wazuh Inc. -->
+
+<!-- Example -->
+<group name="local,syslog,sshd,">
+
+  <!--
+  Dec 10 01:02:02 host sshd[1234]: Failed none for root from 1.1.1.1 port 1066 ssh2
+  -->
+  <rule id="100001" level="5">
+    <if_sid>5716</if_sid>
+    <srcip>1.1.1.1</srcip>
+    <description>sshd: authentication failed from IP 1.1.1.1.</description>
+    <group>authentication_failed,pci_dss_10.2.4,pci_dss_10.2.5,</group>
+  </rule>
+
+</group>
+<group name="web,sqli,custom,">
+ <rule id="100100" level="10">
+  <if_sid>31100</if_sid>
+  <regex type="pcre2">(?i)(sqlmap|or%20+1=1|or\s+1=1|union%20select|union\s+select)</regex>
+  <description>Tentativa de SQL Injection detetada (regra personalizada)</description>
+  <mitre>
+   <id>T1190</id>
+  </mitre>
+ </rule>
+</group>
+
+
+<group name="web,dos,custom,">
+ <rule id="100110" level="12" frequency="10" timeframe="60">
+  <if_matched_sid>31101</if_matched_sid>
+  <same_srcip />
+  <description>Possivel abuso web: excesso de erros HTTP 4xx do mesmo IP</description>
+  <group>web,attack,</group>
+ </rule>
+</group>
+
+<group name="web,xss,custom,">
+ <rule id="100130" level="8">
+  <if_sid>31100</if_sid>
+  <regex type="pcre2">(?i)(%3Cscript|&lt;script|javascript:|onerror\s*=|onerror%3D|onload\s*=|onload%3D|alert\(|alert%28|document\.cookie)</regex>
+  <description>Tentativa de Cross-Site Scripting (XSS) detetada (regra personalizada)</description>
+  <mitre>
+   <id>T1190</id>
+  </mitre>
+ </rule>
+</group>
+
+<group name="syslog,group04,">
+ <rule id="100140" level="8">
+  <match>ALERTA_GRUPO_04_SYSLOG</match>
+  <description>Grupo 4 - Evento de segurança recebido por Syslog</description>
+ </rule>
+</group>
