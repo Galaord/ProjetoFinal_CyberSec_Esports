@@ -374,8 +374,8 @@
 					{{ request.session.utilizador_nickname }} ▾
 				</button>
 				<div class="dropdown-menu" id="userDropdownMenu" role="menu">
-					<a class="dropdown-item" href="#" role="menuitem">Perfil</a>
-					<a class="dropdown-item" href="#" role="menuitem">Equipa</a>
+					<a class="dropdown-item" href="/perfil/" role="menuitem">Perfil</a>
+					<a class="dropdown-item" href="/gestao-equipa/" role="menuitem">Gerir equipa</a>
 					<a class="dropdown-item danger" href="{% url 'logout' %}" role="menuitem">Terminar Sessão</a>
 				</div>
 			</div>
@@ -391,6 +391,10 @@
 		<div class="eyebrow">Hub da Comunidade</div>
 		<h1>Equipas &amp; <span class="gradient-text">Jogadores</span></h1>
 		<p class="page-desc">Explora as equipas ativas, descobre novos talentos e consulta os planteis da NEXUS ARENA.</p>
+		<div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px">
+			<a class="btn btn-primary" href="/equipas/">Criar ou encontrar equipa</a>
+			<a class="btn btn-ghost" href="/gestao-equipa/">Gerir a minha equipa</a>
+		</div>
 	</section>
 
 	<div class="controls-bar">

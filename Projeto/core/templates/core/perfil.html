@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#050811">
+	<title>O meu perfil | NEXUS ARENA</title>
+	<style>
+		:root{--bg:#050811;--panel:#0f172a;--panel2:#141f36;--text:#fff;--muted:#cbd5e1;--red:#ff2a4b;--blue:#06f;--cyan:#00d2ff;--line:rgba(255,255,255,.12)}
+		*{box-sizing:border-box}
+		body{margin:0;min-height:100vh;background:radial-gradient(circle at 78% 12%,rgba(0,102,255,.2),transparent 35%),radial-gradient(circle at 10% 35%,rgba(255,42,75,.16),transparent 35%),linear-gradient(180deg,#04060d,#080d1a 48%,#050811);color:var(--text);font-family:Inter,system-ui,sans-serif}
+		a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}.container{width:min(1120px,calc(100% - 40px));margin:auto}
+		.nav{height:78px;display:flex;align-items:center;justify-content:space-between;gap:22px}.logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;letter-spacing:-1px}.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--blue));transform:skew(-12deg)}
+		.nav-links{display:flex;gap:25px;color:var(--muted);font-size:13px;font-weight:700}.nav-links a:hover,.nav-links .active{color:var(--cyan)}.nav-actions{display:flex;align-items:center;gap:10px}
+		.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 15px;border:1px solid var(--line);border-radius:9px;color:#fff;background:rgba(255,255,255,.04);font-size:12px;font-weight:800;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-2px);border-color:var(--cyan)}.btn-primary{border:0;background:linear-gradient(100deg,var(--red),var(--blue))}
+		main{padding:42px 0 80px}.eyebrow{color:var(--red);font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase}.page-heading{display:flex;align-items:end;justify-content:space-between;gap:25px;margin-bottom:28px}h1{margin:10px 0;font-size:clamp(34px,5vw,52px);letter-spacing:-2.5px;line-height:1}.gradient{background:linear-gradient(90deg,#fff 15%,var(--cyan) 60%,var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}.page-heading p{max-width:480px;margin:0;color:var(--muted);line-height:1.6;font-size:14px}
+		.prototype-note{margin:0 0 22px;padding:12px 15px;border:1px solid rgba(0,210,255,.2);border-radius:10px;background:rgba(0,210,255,.06);color:#bae6fd;font-size:12px;line-height:1.6}
+		.profile-hero,.panel{border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(5,8,17,.96))}
+		.profile-hero{display:flex;align-items:center;gap:22px;padding:25px;margin-bottom:18px}.avatar{display:grid;place-items:center;flex:none;width:82px;height:82px;border:1px solid rgba(0,210,255,.3);border-radius:22px;background:linear-gradient(145deg,rgba(0,210,255,.18),rgba(255,42,75,.2));color:#fff;font-size:25px;font-weight:900}.identity{flex:1;min-width:0}.identity h2{margin:0 0 7px;font-size:25px;letter-spacing:-.7px}.identity p{margin:0;color:var(--muted);font-size:13px}.identity-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.pill{padding:6px 9px;border:1px solid var(--line);border-radius:99px;color:var(--muted);font-size:10px;font-weight:800}.pill.online{border-color:rgba(52,211,153,.25);background:rgba(52,211,153,.08);color:#6ee7b7}
+		.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}.stat{padding:17px;border:1px solid var(--line);border-radius:13px;background:rgba(15,23,42,.7)}.stat strong{display:block;color:var(--cyan);font-size:24px}.stat span{color:var(--muted);font-size:11px}
+		.content-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.panel{padding:21px}.panel h3{margin:0 0 17px;font-size:16px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:800;color:#e2e8f0}.field input,.field select,.field textarea{width:100%;min-height:42px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;outline:none;background:rgba(5,8,17,.8);color:#fff}.field select{cursor:pointer}.field textarea{min-height:85px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--cyan)}.form-actions{display:flex;align-items:center;gap:12px;margin-top:15px}.form-status{color:#6ee7b7;font-size:11px}
+		.team-box{padding:15px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025)}.team-box[hidden]{display:none}.team-box-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.team-box h4{margin:0 0 5px;font-size:15px}.team-box p{margin:0;color:var(--muted);font-size:11px}.team-tag{color:var(--cyan);font-size:11px;font-weight:900}.team-actions{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}.btn-danger{border-color:rgba(255,42,75,.3);background:rgba(255,42,75,.12);color:#ff8797}footer{padding:0 0 28px;color:var(--muted);font-size:11px}
+		@media(max-width:760px){.nav-links{display:none}.page-heading{align-items:flex-start;flex-direction:column}.content-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+		@media(max-width:500px){.container{width:calc(100% - 28px)}.nav{height:68px}.nav-actions .btn:not(.btn-primary){display:none}.profile-hero{align-items:flex-start;flex-wrap:wrap;padding:18px}.identity{min-width:calc(100% - 105px)}.profile-hero>.btn{width:100%}.field-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.page-heading p{font-size:13px}}
+	</style>
+</head>
+<body>
+	<header class="container nav">
+		<a class="logo" href="{% url 'pagina_inicial' %}"><span class="logo-mark" aria-hidden="true"></span>NEXUS ARENA</a>
+		<nav class="nav-links" aria-label="Navegação principal">
+			<a href="{% url 'jogos' %}">Jogos</a><a href="{% url 'torneios' %}">Torneios</a><a href="{% url 'comunidade' %}">Comunidade</a><a class="active" href="/equipas/">Equipas</a>
+		</nav>
+		<div class="nav-actions"><a class="btn" href="/equipas/">Explorar equipas</a><a class="btn btn-primary" href="/gestao-equipa/">Gerir equipa</a></div>
+	</header>
+	<main class="container">
+		<div class="page-heading"><div><div class="eyebrow">Área de jogador</div><h1>O meu <span class="gradient">perfil.</span></h1></div><p>Gere a tua identidade competitiva, acompanha o teu percurso e mantém os teus dados prontos para a próxima partida.</p></div>
+		<p class="prototype-note"><strong>Protótipo visual:</strong> as alterações e ações nesta página são apenas demonstrativas e ainda não ficam guardadas na base de dados.</p>
+		<section class="profile-hero" aria-label="Resumo do perfil">
+			<div class="avatar" id="profile-avatar">{{ request.session.utilizador_nickname|default:"NA"|slice:":2"|upper }}</div>
+			<div class="identity"><h2 id="profile-nickname">{{ request.session.utilizador_nickname|default:"Novo jogador" }}</h2><p id="profile-name">Jogador da NEXUS ARENA</p><div class="identity-meta"><span class="pill online">● Perfil ativo</span><span class="pill" id="profile-country-display">Portugal</span></div></div>
+		</section>
+		<section class="stats" aria-label="Estatísticas de demonstração">
+			<div class="stat"><strong>24</strong><span>Partidas jogadas</span></div><div class="stat"><strong>68%</strong><span>Taxa de vitória</span></div><div class="stat"><strong>1.42</strong><span>K/D médio</span></div><div class="stat"><strong>3</strong><span>Torneios disputados</span></div>
+		</section>
+		<div class="content-grid">
+			<section class="panel">
+				<h3>Informação do jogador</h3>
+				<form id="profile-form">
+					<div class="field-grid">
+						<div class="field"><label for="profile-name-input">Nome</label><input id="profile-name-input" name="name" value="Jogador da NEXUS ARENA" maxlength="80"></div>
+						<div class="field"><label for="profile-nickname-input">Nickname</label><input id="profile-nickname-input" name="nickname" value="{{ request.session.utilizador_nickname|default:'Novo jogador' }}" maxlength="50"></div>
+						<div class="field"><label for="profile-country">País</label>
+							<select id="profile-country" name="country">
+							{% include "core/_country_options.html" %}
+							</select>
+						</div>
+						<div class="field full"><label for="profile-bio">Sobre mim</label><textarea id="profile-bio" name="bio" maxlength="240" placeholder="Conta à comunidade como gostas de jogar."></textarea></div>
+					</div>
+					<div class="form-actions"><button class="btn btn-primary" type="submit">Guardar alterações</button><span class="form-status" id="profile-status" role="status" aria-live="polite"></span></div>
+				</form>
+			</section>
+			<aside class="panel">
+				<h3>A minha equipa</h3>
+				<div class="team-box" id="current-team" {% if not equipa %}hidden{% endif %}>
+					<div class="team-box-top"><div><h4>{{ equipa.nome }}</h4><p>{{ equipa.pais|default:"País não definido" }}</p></div><span class="team-tag">{{ equipa.tag }}</span></div>
+					<div class="team-actions"><a class="btn btn-primary" href="/gestao-equipa/">Gerir equipa</a><button class="btn btn-danger" id="leave-team" type="button">Sair da equipa</button></div>
+				</div>
+				<div class="team-box" id="no-team" {% if equipa %}hidden{% endif %}>
+					<h4>Sem equipa</h4><p>Encontra jogadores e junta-te a uma equipa para entrar na competição.</p>
+					<div class="team-actions"><a class="btn btn-primary" href="/equipas/">Encontrar equipa</a></div>
+				</div>
+				<p class="form-status" id="team-status" role="status" aria-live="polite"></p>
+			</aside>
+		</div>
+	</main>
+	<footer class="container">© 2026 NEXUS ARENA · Estatísticas e atividade apresentadas como exemplo.</footer>
+	<script>
+		const profileForm = document.getElementById("profile-form");
+		profileForm.addEventListener("submit", (event) => {
+			event.preventDefault();
+			const nickname = document.getElementById("profile-nickname-input").value.trim();
+			const name = document.getElementById("profile-name-input").value.trim();
+			if (!nickname || !name) return;
+			document.getElementById("profile-nickname").textContent = nickname;
+			document.getElementById("profile-name").textContent = name;
+			document.getElementById("profile-avatar").textContent = nickname.slice(0, 2).toUpperCase();
+			document.getElementById("profile-country-display").textContent = document.getElementById("profile-country").value;
+			document.getElementById("profile-status").textContent = "Pré-visualização atualizada neste browser.";
+		});
+		const leaveTeamButton = document.getElementById("leave-team");
+		if (leaveTeamButton) {
+			leaveTeamButton.addEventListener("click", () => {
+				document.getElementById("current-team").hidden = true;
+				document.getElementById("no-team").hidden = false;
+				document.getElementById("team-status").textContent = "Saíste da equipa nesta pré-visualização.";
+			});
+		}
+	</script>
+</body>
+</html>

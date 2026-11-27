@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pt">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="theme-color" content="#050811">
+	<title>Equipas | NEXUS ARENA</title>
+	<style>
+		:root{--panel:#0f172a;--text:#fff;--muted:#cbd5e1;--red:#ff2a4b;--blue:#06f;--cyan:#00d2ff;--line:rgba(255,255,255,.12)}
+		*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 78% 12%,rgba(0,102,255,.2),transparent 35%),radial-gradient(circle at 10% 35%,rgba(255,42,75,.16),transparent 35%),linear-gradient(180deg,#04060d,#080d1a 48%,#050811);color:var(--text);font-family:Inter,system-ui,sans-serif}a{color:inherit;text-decoration:none}button,input,select{font:inherit}.container{width:min(1120px,calc(100% - 40px));margin:auto}
+		.nav{height:78px;display:flex;align-items:center;justify-content:space-between;gap:22px}.logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;letter-spacing:-1px}.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--red),var(--blue));transform:skew(-12deg)}.nav-links{display:flex;gap:25px;color:var(--muted);font-size:13px;font-weight:700}.nav-links a:hover,.nav-links .active{color:var(--cyan)}.nav-actions{display:flex;gap:9px;align-items:center}
+		.btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 15px;border:1px solid var(--line);border-radius:9px;color:#fff;background:rgba(255,255,255,.04);font-size:12px;font-weight:800;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-2px);border-color:var(--cyan)}.btn-primary{border:0;background:linear-gradient(100deg,var(--red),var(--blue))}
+		main{padding:42px 0 80px}.heading{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:23px}.eyebrow{color:var(--red);font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase}h1{margin:10px 0;font-size:clamp(34px,5vw,52px);letter-spacing:-2.5px;line-height:1}.gradient{background:linear-gradient(90deg,#fff 15%,var(--cyan) 60%,var(--red));-webkit-background-clip:text;background-clip:text;color:transparent}.heading p{max-width:470px;margin:0;color:var(--muted);font-size:14px;line-height:1.6}
+		.prototype-note{margin:0 0 20px;padding:12px 15px;border:1px solid rgba(0,210,255,.2);border-radius:10px;background:rgba(0,210,255,.06);color:#bae6fd;font-size:12px;line-height:1.6}
+		.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}.action-card{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(5,8,17,.96))}.action-card h2{margin:0 0 6px;font-size:17px}.action-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.search-card{flex-direction:column;align-items:stretch;justify-content:center;gap:12px}.search-card .search{width:100%}
+		.controls{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:26px 0 15px}.controls h2{margin:0;font-size:19px}.search{width:min(330px,100%);height:42px;padding:0 13px;border:1px solid var(--line);border-radius:9px;outline:none;background:rgba(5,8,17,.8);color:#fff}.search:focus{border-color:var(--cyan)}.team-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.team-card{padding:18px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(145deg,rgba(15,23,42,.94),rgba(5,8,17,.96));transition:.2s}.team-card:hover{transform:translateY(-3px);border-color:rgba(0,210,255,.4)}.card-head{display:flex;align-items:center;gap:12px}.team-logo{display:grid;place-items:center;width:45px;height:45px;flex:none;border-radius:13px;background:linear-gradient(145deg,rgba(255,42,75,.24),rgba(0,102,255,.25));font-weight:900;font-size:12px}.card-head h3{margin:0 0 4px;font-size:14px}.card-head p{margin:0;color:var(--muted);font-size:11px}.team-info{display:flex;gap:13px;margin:17px 0;color:var(--muted);font-size:11px}.team-info strong{color:#fff}.card-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}.status{min-height:18px;color:#6ee7b7;font-size:10px}.empty{grid-column:1/-1;padding:24px;color:var(--muted);text-align:center;border:1px dashed var(--line);border-radius:12px}
+		dialog{width:min(470px,calc(100% - 28px));padding:0;border:1px solid var(--line);border-radius:16px;background:#0b1222;color:#fff;box-shadow:0 28px 80px rgba(0,0,0,.7)}dialog::backdrop{background:rgba(0,0,0,.74);backdrop-filter:blur(4px)}.dialog-body{padding:23px}.dialog-top{display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:18px}.dialog-top h2{margin:0 0 5px;font-size:19px}.dialog-top p{margin:0;color:var(--muted);font-size:12px}.close{border:0;background:transparent;color:var(--muted);font-size:23px;cursor:pointer}.form-grid{display:grid;gap:13px}.field{display:grid;gap:6px}.field label{font-size:11px;font-weight:800}.field input,.field select{height:42px;padding:0 11px;border:1px solid var(--line);border-radius:8px;background:#080d18;color:#fff;outline:none}.field input:focus,.field select:focus{border-color:var(--cyan)}.dialog-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:17px}.notice{margin:0 0 12px;color:#6ee7b7;font-size:12px;min-height:18px}
+		@media(max-width:850px){.team-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.heading{align-items:flex-start;flex-direction:column}}
+		@media(max-width:650px){.nav-links{display:none}.action-grid{grid-template-columns:1fr}.heading{gap:9px}.controls{align-items:stretch;flex-direction:column}.search{width:100%}}
+		@media(max-width:500px){.container{width:calc(100% - 28px)}.nav{height:68px}.team-grid{grid-template-columns:1fr}.nav-actions .btn:first-child{display:none}.action-card{align-items:flex-start}.card-actions{align-items:flex-end}}
+	</style>
+</head>
+<body>
+	<header class="container nav">
+		<a class="logo" href="{% url 'pagina_inicial' %}"><span class="logo-mark" aria-hidden="true"></span>NEXUS ARENA</a>
+		<nav class="nav-links" aria-label="Navegação principal"><a href="{% url 'jogos' %}">Jogos</a><a href="{% url 'torneios' %}">Torneios</a><a href="{% url 'comunidade' %}">Comunidade</a><a class="active" href="/equipas/">Equipas</a></nav>
+		<div class="nav-actions"><a class="btn" href="/perfil/">O meu perfil</a><a class="btn btn-primary" href="/gestao-equipa/">Gerir equipa</a></div>
+	</header>
+	<main class="container">
+		<div class="heading"><div><div class="eyebrow">Comunidade competitiva</div><h1>Encontra a tua <span class="gradient">equipa.</span></h1></div><p>Descobre equipas à procura de novos jogadores ou junta os teus amigos e cria um projeto à tua medida.</p></div>
+		<p class="prototype-note"><strong>Protótipo visual:</strong> criar equipas e pedir para entrar são demonstrações no browser; ainda não enviam dados para o servidor.</p>
+		<section class="action-grid" aria-label="Ações de equipa">
+			<article class="action-card"><div><h2>Já tens um grupo?</h2><p>Cria a identidade da tua equipa e prepara a formação para competir.</p></div><button class="btn btn-primary" type="button" data-open-dialog="create-dialog">＋ Criar equipa</button></article>
+			<article class="action-card search-card"><div><h2>À procura de equipa?</h2></div><input class="search" id="team-search" type="search" placeholder="Pesquisar por nome, tag ou país" aria-label="Pesquisar equipas"></article>
+		</section>
+		<div class="controls"><h2>Equipas em destaque</h2></div>
+		<p class="notice" id="page-notice" role="status" aria-live="polite"></p>
+		<section class="team-grid" id="team-grid" aria-label="Lista de equipas">
+			<article class="team-card" data-search="lusitanos gaming lus portugal">
+				<div class="card-head"><div class="team-logo">LUS</div><div><h3>Lusitanos Gaming</h3><p>Portugal · Counter-Strike 2</p></div></div>
+				<div class="team-info"><span><strong>4</strong> jogadores</span><span><strong>3</strong> vitórias</span><span>Procura <strong>1</strong> jogador</span></div>
+				<div class="card-actions"><span class="status"></span><button class="btn join-button" type="button">Pedir para entrar</button></div>
+			</article>
+			<article class="team-card" data-search="atlantic five atf portugal">
+				<div class="card-head"><div class="team-logo">ATF</div><div><h3>Atlantic Five</h3><p>Portugal · Counter-Strike 2</p></div></div>
+				<div class="team-info"><span><strong>3</strong> jogadores</span><span><strong>1</strong> vitória</span><span>Procura <strong>2</strong> jogadores</span></div>
+				<div class="card-actions"><span class="status"></span><button class="btn join-button" type="button">Pedir para entrar</button></div>
+			</article>
+			<article class="team-card" data-search="brazil storm bst brasil">
+				<div class="card-head"><div class="team-logo">BST</div><div><h3>Brazil Storm</h3><p>Brasil · Counter-Strike 2</p></div></div>
+				<div class="team-info"><span><strong>3</strong> jogadores</span><span><strong>2</strong> vitórias</span><span>Procura <strong>2</strong> jogadores</span></div>
+				<div class="card-actions"><span class="status"></span><button class="btn join-button" type="button">Pedir para entrar</button></div>
+			</article>
+			<article class="team-card" data-search="european wolves ew alemanha">
+				<div class="card-head"><div class="team-logo">EW</div><div><h3>European Wolves</h3><p>Alemanha · Counter-Strike 2</p></div></div>
+				<div class="team-info"><span><strong>3</strong> jogadores</span><span><strong>4</strong> vitórias</span><span>Procura <strong>1</strong> jogador</span></div>
+				<div class="card-actions"><span class="status"></span><button class="btn join-button" type="button">Pedir para entrar</button></div>
+			</article>
+		</section>
+	</main>
+	<dialog id="create-dialog" aria-labelledby="create-title">
+		<div class="dialog-body"><div class="dialog-top"><div><h2 id="create-title">Criar equipa</h2><p>Define os dados principais do teu projeto.</p></div><button class="close" type="button" aria-label="Fechar" data-close-dialog>&times;</button></div>
+			<form class="form-grid" id="create-form">
+				<div class="field"><label for="team-name">Nome da equipa</label><input id="team-name" name="name" maxlength="100" required placeholder="Ex.: Lisboa Esports"></div>
+				<div class="field"><label for="team-tag">Tag</label><input id="team-tag" name="tag" maxlength="10" required placeholder="Ex.: LXB"></div>
+				<div class="field"><label for="team-country">País / região</label><select id="team-country" name="country"><option>Portugal</option><option>Brasil</option><option>Espanha</option><option>Outro</option></select></div>
+				<p class="notice" id="create-notice" role="status" aria-live="polite"></p>
+				<div class="dialog-actions"><button class="btn" type="button" data-close-dialog>Cancelar</button><button class="btn btn-primary" type="submit">Criar pré-visualização</button></div>
+			</form>
+		</div>
+	</dialog>
+	<script>
+		const teamGrid = document.getElementById("team-grid");
+		const createDialog = document.getElementById("create-dialog");
+		document.querySelectorAll("[data-open-dialog]").forEach((button) => button.addEventListener("click", () => createDialog.showModal()));
+		document.querySelectorAll("[data-close-dialog]").forEach((button) => button.addEventListener("click", () => createDialog.close()));
+		document.getElementById("team-search").addEventListener("input", (event) => {
+			const query = event.target.value.trim().toLocaleLowerCase("pt");
+			teamGrid.querySelectorAll(".team-card").forEach((card) => {
+				card.hidden = !card.dataset.search.includes(query);
+			});
+		});
+		teamGrid.addEventListener("click", (event) => {
+			const button = event.target.closest(".join-button");
+			if (!button) return;
+			button.disabled = true;
+			button.textContent = "Pedido registado";
+			button.closest(".card-actions").querySelector(".status").textContent = "Pré-visualização: pedido enviado";
+			document.getElementById("page-notice").textContent = "O pedido é apenas demonstrativo e não foi enviado ao servidor.";
+		});
+		document.getElementById("create-form").addEventListener("submit", (event) => {
+			event.preventDefault();
+			const form = event.currentTarget;
+			const name = form.elements.name.value.trim();
+			const tag = form.elements.tag.value.trim().toUpperCase();
+			const country = form.elements.country.value;
+			if (!name || !tag) return;
+			const card = document.createElement("article");
+			card.className = "team-card";
+			card.dataset.search = `${name} ${tag} ${country}`.toLocaleLowerCase("pt");
+			const head = document.createElement("div");
+			head.className = "card-head";
+			const logo = document.createElement("div");
+			logo.className = "team-logo";
+			logo.textContent = tag;
+			const identity = document.createElement("div");
+			const title = document.createElement("h3");
+			title.textContent = name;
+			const region = document.createElement("p");
+			region.textContent = `${country} · Counter-Strike 2`;
+			identity.append(title, region);
+			head.append(logo, identity);
+			const info = document.createElement("div");
+			info.className = "team-info";
+			info.textContent = "Nova equipa · Ainda sem estatísticas";
+			const actions = document.createElement("div");
+			actions.className = "card-actions";
+			const status = document.createElement("span");
+			status.className = "status";
+			status.textContent = "Criada nesta pré-visualização";
+			actions.append(status);
+			card.append(head, info, actions);
+			teamGrid.prepend(card);
+			createDialog.close();
+			form.reset();
+			document.getElementById("page-notice").textContent = "A equipa foi adicionada apenas a esta pré-visualização.";
+		});
+	</script>
+</body>
+</html>
